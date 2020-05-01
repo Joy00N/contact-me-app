@@ -6,12 +6,14 @@ import {AppComponent} from './app.component';
 import {HomeComponent} from './home/home.component';
 import {ContactsComponent} from './contacts/contacts.component';
 import {HttpClientModule} from '@angular/common/http';
+import {ContactEditComponent} from './contacts/contact-edit.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     HomeComponent,
-    ContactsComponent
+    ContactsComponent,
+    ContactEditComponent
   ],
   imports: [
     BrowserModule,
