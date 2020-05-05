@@ -9,7 +9,7 @@ import {HttpClientModule} from '@angular/common/http';
 import {ContactEditComponent} from './contacts/contact-edit.component';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {DemoMaterialModule} from './shared/material-module';
-import {FormsModule} from '@angular/forms';
+import {ReactiveFormsModule} from '@angular/forms';
 import {ContactService} from './service/contact.service';
 
 @NgModule({
@@ -20,7 +20,7 @@ import {ContactService} from './service/contact.service';
     ContactEditComponent
   ],
   imports: [
-    FormsModule,
+    ReactiveFormsModule,
     BrowserModule,
     HttpClientModule,
     AppRoutingModule,

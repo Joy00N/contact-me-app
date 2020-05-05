@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {ContactService} from '../service/contact.service';
 import {Contact} from '../service/contact';
-import {FormGroup, Validators} from '@angular/forms';
+import {FormControl, FormGroup, Validators} from '@angular/forms';
 
 @Component({
   selector: 'app-contact-edit',
@@ -10,28 +10,18 @@ import {FormGroup, Validators} from '@angular/forms';
 })
 export class ContactEditComponent implements OnInit {
 
+  contactForm: FormGroup;
+  contact = new Contact();
   constructor(private contactService: ContactService) {
   }
 
-  form = new FormGroup({
-    name: new FormGroup(''),
-    type: new FormGroup(''),
-    openDate: new FormGroup(''),
-    email: new FormGroup('', [Validators.required, Validators.email]),
-    emailNotification: new FormGroup('')
-  });
-
   ngOnInit() {
+    this.contactForm = new FormGroup({
+      name: new FormControl(),
+      type: new FormControl(),
+      openDate: new FormControl(),
+      email: new FormControl(),
+      emailNotification: new FormControl(true)
+    });
   }
-
-  onClickSave() {
-  this.form
-
-    this.contactService.setContacts();
-  }
-
-  // parseToContactFormat() {
-  //   contact = new Contact();
-  //
-  // }
 }
