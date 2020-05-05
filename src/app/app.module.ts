@@ -10,6 +10,7 @@ import {ContactEditComponent} from './contacts/contact-edit.component';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {DemoMaterialModule} from './shared/material-module';
 import {FormsModule} from '@angular/forms';
+import {ContactService} from './service/contact.service';
 
 @NgModule({
   declarations: [
@@ -26,7 +27,7 @@ import {FormsModule} from '@angular/forms';
     BrowserAnimationsModule,
     DemoMaterialModule
   ],
-  providers: [],
+  providers: [ContactService],
   bootstrap: [AppComponent],
   schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })

@@ -1,6 +1,4 @@
 <div class="container-fluid ml-2 mt-3">
-
-
   <form>
     <div class="form-group row">
       <label for="productName" class="col-form-label col-sm-1 pl-0">Product</label>
@@ -13,26 +11,26 @@
       <label class="col-form-label col-sm-1 pl-0">Type</label>
       <div class="col-sm-4">
         <div class="form-check form-check-inline">
-          <input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios1" value="option1" checked>
-          <label class="form-check-label" for="exampleRadios1">
+          <input class="form-check-input" type="radio" name="exampleRadios" id="yearly" value="option1" checked>
+          <label class="form-check-label" for="yearly">
             Yearly
           </label>
         </div>
         <div class="form-check form-check-inline">
-          <input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios2" value="option2">
-          <label class="form-check-label" for="exampleRadios2">
+          <input class="form-check-input" type="radio" name="exampleRadios" id="monthly" value="option2">
+          <label class="form-check-label" for="monthly">
             Monthly
           </label>
         </div>
         <div class="form-check form-check-inline">
-          <input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios3" value="option3">
-          <label class="form-check-label" for="exampleRadios3">
+          <input class="form-check-input" type="radio" name="exampleRadios" id="biweekly" value="option3">
+          <label class="form-check-label" for="biweekly">
             Bi-weekly
           </label>
         </div>
         <div class="form-check form-check-inline">
-          <input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios4" value="option3">
-          <label class="form-check-label" for="exampleRadios3">
+          <input class="form-check-input" type="radio" name="exampleRadios" id="daily" value="option3">
+          <label class="form-check-label" for="daily">
             Daily
           </label>
         </div>
@@ -50,19 +48,18 @@
     </div>
 
     <div class="form-group row">
-      <label for="exampleFormControlInput1" class="col-form-label col-sm-1 pl-0">Email</label>
+      <label for="email" class="col-form-label col-sm-1 pl-0">Email</label>
       <div class="col-sm-3">
-        <input type="email" class="form-control" id="exampleFormControlInput1" placeholder="name@example.com">
+        <input type="email" class="form-control" id="email" placeholder="name@example.com">
       </div>
     </div>
 
     <div class="form-group row pl-4">
-      <input type="checkbox" class="custom-control-input" id="customCheck1">
-      <label class="custom-control-label" for="customCheck1">Receive Email Notification</label>
+      <input type="checkbox" class="custom-control-input" id="emailNotification">
+      <label class="custom-control-label" for="emailNotification">Receive Email Notification</label>
     </div>
-
   </form>
 
-  <button type="button" class="btn btn-primary">Save</button>
+  <button type="button" class="btn btn-primary" (click)="onClickSave()">Save</button>
   <button type="button" class="btn btn-secondary">Cancel</button>
 </div>
