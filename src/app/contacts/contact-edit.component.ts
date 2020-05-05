@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {ContactService} from '../service/contact.service';
 import {Contact} from '../service/contact';
-import {FormControl, FormGroup, Validators} from '@angular/forms';
+import {FormBuilder, FormGroup} from '@angular/forms';
 
 @Component({
   selector: 'app-contact-edit',
@@ -12,16 +12,20 @@ export class ContactEditComponent implements OnInit {
 
   contactForm: FormGroup;
   contact = new Contact();
-  constructor(private contactService: ContactService) {
+
+  constructor(private fb: FormBuilder, private contactService: ContactService) {
   }
 
   ngOnInit() {
-    this.contactForm = new FormGroup({
-      name: new FormControl(),
-      type: new FormControl(),
-      openDate: new FormControl(),
-      email: new FormControl(),
-      emailNotification: new FormControl(true)
+    this.contactForm = this.fb.group({
+      name: '',
+      type: 'yearly',
+      openDate: '',
+      email: '',
+      emailNotification: true
     });
+  }
+
+  save() {
   }
 }
