@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {ContactService} from '../service/contact.service';
 import {Contact} from '../service/contact';
-import {FormBuilder, FormGroup} from '@angular/forms';
+import {FormArray, FormBuilder, FormGroup} from '@angular/forms';
 
 @Component({
   selector: 'app-contact-edit',
@@ -11,11 +11,13 @@ import {FormBuilder, FormGroup} from '@angular/forms';
 export class ContactEditComponent implements OnInit {
 
   contactForm: FormGroup;
-  contact = new Contact();
 
   constructor(private fb: FormBuilder, private contactService: ContactService) {
   }
 
+  get contacts() {
+    return this.contactForm.get('contacts') as FormArray;
+  }
   ngOnInit() {
     this.contactForm = this.fb.group({
       name: '',
@@ -27,5 +29,11 @@ export class ContactEditComponent implements OnInit {
   }
 
   save() {
+    console.log(this.contactForm.getRawValue() as Contact);
+    const contact = new Contact();
+    contact.name = this.contactForm.get('name').value;
+    contact.contactType = this.contactForm.get('type').value;
+    contact.openingDate = this.contactForm.get('openDate').value;
+    this.contactService.setContacts(contact);
   }
 }
