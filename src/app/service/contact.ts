@@ -5,4 +5,5 @@ export class Contact {
   openingDate: string;
   expirationDate: string;
   contactType: string;
+  isExpired: boolean;
 }
