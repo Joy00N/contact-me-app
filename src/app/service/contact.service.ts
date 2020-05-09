@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
-import {Contact} from './contact';
+import {Contact} from '../model/contact';
 import {catchError, tap} from 'rxjs/operators';
 import {Observable, throwError} from 'rxjs';
 
@@ -10,6 +10,7 @@ import {Observable, throwError} from 'rxjs';
 export class ContactService {
 
   contactUrl = 'http://localhost:8080/api/contacts';
+  emailUrl = 'http://localhost:8080/api/sendEmail';
 
   constructor(private http: HttpClient) {
   }
@@ -27,6 +28,14 @@ export class ContactService {
       (res) => console.log(res),
       (err) => console.error(err)
     );
+  }
+
+  sendEmail() {
+    this.http.get(this.emailUrl)
+      .pipe(
+        tap(data => console.log(JSON.stringify(data))),
+        catchError(this.handleError)
+      );
   }
 
   private handleError(err) {

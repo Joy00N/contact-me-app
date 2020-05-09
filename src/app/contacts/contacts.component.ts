@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {Contact} from '../service/contact';
+import {Contact} from '../model/contact';
 import {ContactService} from '../service/contact.service';
 
 @Component({
@@ -19,5 +19,9 @@ export class ContactsComponent implements OnInit {
   }
 
   ngOnInit() {
+  }
+
+  handleOnclick() {
+    this.contactService.sendEmail();
   }
 }

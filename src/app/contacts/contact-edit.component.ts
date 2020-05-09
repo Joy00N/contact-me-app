@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {ContactService} from '../service/contact.service';
-import {Contact} from '../service/contact';
+import {Contact} from '../model/contact';
 import {FormArray, FormBuilder, FormGroup} from '@angular/forms';
 
 @Component({
@@ -23,7 +23,6 @@ export class ContactEditComponent implements OnInit {
       name: '',
       type: 'yearly',
       openDate: '',
-      email: '',
       emailNotification: true
     });
   }
