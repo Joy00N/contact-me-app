@@ -20,19 +20,20 @@ export class ContactEditComponent implements OnInit {
   }
   ngOnInit() {
     this.contactForm = this.fb.group({
-      name: '',
-      type: 'yearly',
-      openDate: '',
-      emailNotification: true
+      productName: '',
+      contactType: 'yearly',
+      openingDate: '',
+      isNotificationOn: true
     });
   }
 
   save() {
     console.log(this.contactForm.getRawValue() as Contact);
     const contact = new Contact();
-    contact.name = this.contactForm.get('name').value;
-    contact.contactType = this.contactForm.get('type').value;
-    contact.openingDate = this.contactForm.get('openDate').value;
+    contact.productName = this.contactForm.get('productName').value;
+    contact.contactType = this.contactForm.get('contactType').value;
+    contact.openingDate = this.contactForm.get('openingDate').value;
+    contact.isNotificationOn = this.contactForm.get('isNotificationOn').value;
     this.contactService.setContacts(contact);
   }
 }

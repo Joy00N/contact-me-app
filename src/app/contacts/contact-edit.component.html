@@ -1,35 +1,39 @@
 <div class="container-fluid ml-2 mt-3">
   <form (ngSubmit)="save()" [formGroup]="contactForm">
     <div class="form-group row">
-      <label for="productName" class="col-form-label col-sm-1 pl-0">Product</label>
+      <div class="col-sm-2">
+        <label for="productName" class="col-form-label col-sm-1 pl-0">Product</label>
+      </div>
       <div class="col-sm-3">
-        <input id="productName" type="text" class="form-control" formControlName="name">
+        <input id="productName" type="text" class="form-control" formControlName="productName">
       </div>
     </div>
 
     <div class="form-group row">
-      <label class="col-form-label col-sm-1 pl-0">Type</label>
+      <div class="col-sm-2">
+        <label class="col-form-label col-sm-1 pl-0">Type</label>
+      </div>
       <div class="col-sm-4">
         <div class="form-check form-check-inline">
-          <input class="form-check-input" type="radio" id="yearly" value="yearly" formControlName="type">
+          <input class="form-check-input" type="radio" id="yearly" value="yearly" formControlName="contactType">
           <label class="form-check-label" for="yearly">
             Yearly
           </label>
         </div>
         <div class="form-check form-check-inline">
-          <input class="form-check-input" type="radio" id="monthly" value="monthly" formControlName="type">
+          <input class="form-check-input" type="radio" id="monthly" value="monthly" formControlName="contactType">
           <label class="form-check-label" for="monthly">
             Monthly
           </label>
         </div>
         <div class="form-check form-check-inline">
-          <input class="form-check-input" type="radio" id="biweekly" value="biweekly" formControlName="type">
+          <input class="form-check-input" type="radio" id="biweekly" value="biweekly" formControlName="contactType">
           <label class="form-check-label" for="biweekly">
             Bi-weekly
           </label>
         </div>
         <div class="form-check form-check-inline">
-          <input class="form-check-input" type="radio" id="daily" value="daily" formControlName="type">
+          <input class="form-check-input" type="radio" id="daily" value="daily" formControlName="contactType">
           <label class="form-check-label" for="daily">
             Daily
           </label>
@@ -38,18 +42,22 @@
     </div>
 
     <div class="form-group row">
-      <label class="col-form-label col-sm-1 pl-0 pt-3 align-bottom">Open Date</label>
+      <div class="col-sm-2">
+        <label class="col-form-label pl-0 pt-4 align-bottom">Open Date</label>
+      </div>
       <mat-form-field class="pl-3">
         <mat-label>Choose a date</mat-label>
-        <input matInput [matDatepicker]="myDatepicker" formControlName="openDate">
+        <input matInput [matDatepicker]="myDatepicker" formControlName="openingDate">
         <mat-datepicker-toggle matSuffix [for]="myDatepicker"></mat-datepicker-toggle>
         <mat-datepicker #myDatepicker></mat-datepicker>
       </mat-form-field>
     </div>
 
-    <div class="form-group row pl-4">
-      <input type="checkbox" class="custom-control-input" id="emailNotification" formControlName="emailNotification">
-      <label class="custom-control-label" for="emailNotification">Receive Email Notification</label>
+    <div class="form-group row">
+      <div class="col-sm-6 ml-4">
+        <input type="checkbox" class="custom-control-input" id="emailNotification" formControlName="isNotificationOn">
+        <label class="custom-control-label" for="emailNotification">Receive Email Notification</label>
+      </div>
     </div>
 
     <button type="submit" class="btn btn-primary">Save</button>

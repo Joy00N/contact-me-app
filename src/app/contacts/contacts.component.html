@@ -15,10 +15,12 @@
   <tr *ngFor="let contact of contacts; let i = index;">
     <td><input type="checkbox"/></td>
     <td>{{i + 1}}</td>
-    <td>{{contact.name}}</td>
+    <td>{{contact.productName}}</td>
     <td>{{contact.openingDate}}</td>
     <td>{{contact.expirationDate}}</td>
     <td>{{contact.contactType}}</td>
+    <td>{{contact.isNotificationOn}}</td>
+    <td>{{contact.isExpired}}</td>
     <td></td>
   </tr>
   </tbody>

@@ -1,9 +1,10 @@
 export class Contact {
   id: string;
-  user: string;
-  name: string;
+  userId: string;
+  productName: string;
   openingDate: string;
   expirationDate: string;
   contactType: string;
   isExpired: boolean;
+  isNotificationOn: boolean;
 }
