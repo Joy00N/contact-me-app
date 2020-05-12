@@ -12,6 +12,8 @@ import {DemoMaterialModule} from './shared/material-module';
 import {ReactiveFormsModule} from '@angular/forms';
 import {ContactService} from './service/contact.service';
 import {SignupComponent} from './user/signup.component';
+import {StoreModule} from '@ngrx/store';
+import {StoreDevtoolsModule} from '@ngrx/store-devtools';
 
 @NgModule({
   declarations: [
@@ -27,7 +29,12 @@ import {SignupComponent} from './user/signup.component';
     HttpClientModule,
     AppRoutingModule,
     BrowserAnimationsModule,
-    DemoMaterialModule
+    DemoMaterialModule,
+    StoreModule.forRoot({}),
+    StoreDevtoolsModule.instrument({
+      name: 'Contact me DevTools',
+      maxAge: 25
+    })
   ],
   providers: [ContactService],
   bootstrap: [AppComponent],
