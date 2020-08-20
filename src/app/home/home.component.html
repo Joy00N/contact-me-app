@@ -3,6 +3,10 @@
     <div class="col-4"><img style="width: 70%" [src]="imgPath" [alt]="alt"></div>
     <div class="col-8">
       <app-signup></app-signup>
+      <button type="button" class="btn btn-primary" (click)="onClick()">Do you want a cat?</button>
+      <div *ngIf="catImg">
+        <img [src]="catImg">
+      </div>
     </div>
   </div>
 </div>
