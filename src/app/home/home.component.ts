@@ -12,6 +12,7 @@ export class HomeComponent implements OnInit {
   alt = 'Contact me logo';
 
   catImg = null;
+  isCatShowing = false;
 
   constructor(private catService: CatServiceService) {
   }
@@ -25,6 +26,11 @@ export class HomeComponent implements OnInit {
     }, error => {
       console.log(error);
     });
+    this.isCatShowing = true;
+  }
+
+  onHideClick() {
+    this.isCatShowing = false;
   }
 
   createImageFromBlob(image: Blob) {
