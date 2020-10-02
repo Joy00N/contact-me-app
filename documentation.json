@@ -1,0 +1,2275 @@
+{
+    "pipes": [],
+    "interfaces": [
+        {
+            "name": "UserState",
+            "id": "interface-UserState-4ac7f05cd505ac08aac6fff6a35a9191",
+            "file": "src/app/user/state/user.reducer.ts",
+            "type": "interface",
+            "sourceCode": "import {UserActionTypes} from './user.actions';\nimport {createFeatureSelector, createSelector} from '@ngrx/store';\n\nexport interface UserState {\n  loggedIn: boolean;\n}\n\nconst initialState: UserState = {\n  loggedIn: false\n};\n\nconst getUserFeatureState = createFeatureSelector<UserState>('users');\n\nexport const getIsLoggedIn = createSelector(\n  getUserFeatureState,\n  state => state.loggedIn\n);\n\nexport function reducer(state = initialState, action): UserState {\n  switch (action.type) {\n    case UserActionTypes.login:\n      return {\n        ...state,\n        loggedIn: action.payload\n      };\n    default:\n      return state;\n  }\n}\n",
+            "properties": [
+                {
+                    "name": "loggedIn",
+                    "type": "boolean",
+                    "optional": false,
+                    "description": "",
+                    "line": 5
+                }
+            ],
+            "indexSignatures": [],
+            "kind": 150,
+            "methods": []
+        }
+    ],
+    "injectables": [
+        {
+            "name": "CatServiceService",
+            "id": "injectable-CatServiceService-a53f511b87fd1cdb473cb97dd4dbb0a0",
+            "file": "src/app/service/cat-service.service.ts",
+            "properties": [
+                {
+                    "name": "url",
+                    "defaultValue": "`https://cors-anywhere.herokuapp.com/https://http.cat/`",
+                    "type": "",
+                    "optional": false,
+                    "description": "",
+                    "line": 10,
+                    "modifierKind": [
+                        112
+                    ]
+                }
+            ],
+            "methods": [
+                {
+                    "name": "getCat",
+                    "args": [],
+                    "optional": false,
+                    "returnType": "Observable<Blob>",
+                    "typeParameters": [],
+                    "line": 15
+                }
+            ],
+            "description": "",
+            "sourceCode": "import {Injectable} from '@angular/core';\nimport {HttpClient} from '@angular/common/http';\nimport {Observable} from 'rxjs';\n\n@Injectable({\n  providedIn: 'root'\n})\nexport class CatServiceService {\n\n  private url = `https://cors-anywhere.herokuapp.com/https://http.cat/`;\n\n  constructor(private http: HttpClient) {\n  }\n\n  getCat(): Observable<Blob> {\n    const httpCodeList = [100, 101, 102, 200, 201, 202, 204];\n    const randomNumber = Math.floor(Math.random() * (httpCodeList.length - 1));\n    return this.http.get(this.url + httpCodeList[randomNumber], {responseType: 'blob'});\n  }\n}\n",
+            "constructorObj": {
+                "name": "constructor",
+                "description": "",
+                "args": [
+                    {
+                        "name": "http",
+                        "type": "HttpClient"
+                    }
+                ],
+                "line": 10,
+                "jsdoctags": [
+                    {
+                        "name": "http",
+                        "type": "HttpClient",
+                        "tagName": {
+                            "text": "param"
+                        }
+                    }
+                ]
+            },
+            "type": "injectable"
+        },
+        {
+            "name": "ContactService",
+            "id": "injectable-ContactService-86cd1db14aa4cef90b24530132818e12",
+            "file": "src/app/service/contact.service.ts",
+            "properties": [
+                {
+                    "name": "contactUrl",
+                    "defaultValue": "'http://localhost:8080/api/contacts'",
+                    "type": "string",
+                    "optional": false,
+                    "description": "",
+                    "line": 12
+                },
+                {
+                    "name": "emailUrl",
+                    "defaultValue": "'http://localhost:8080/api/sendEmail'",
+                    "type": "string",
+                    "optional": false,
+                    "description": "",
+                    "line": 13
+                }
+            ],
+            "methods": [
+                {
+                    "name": "getContacts",
+                    "args": [],
+                    "optional": false,
+                    "returnType": "Observable<Contact[]>",
+                    "typeParameters": [],
+                    "line": 18
+                },
+                {
+                    "name": "handleError",
+                    "args": [
+                        {
+                            "name": "err",
+                            "type": ""
+                        }
+                    ],
+                    "optional": false,
+                    "returnType": "any",
+                    "typeParameters": [],
+                    "line": 41,
+                    "modifierKind": [
+                        112
+                    ],
+                    "jsdoctags": [
+                        {
+                            "name": "err",
+                            "type": "",
+                            "tagName": {
+                                "text": "param"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "sendEmail",
+                    "args": [],
+                    "optional": false,
+                    "returnType": "void",
+                    "typeParameters": [],
+                    "line": 33
+                },
+                {
+                    "name": "setContacts",
+                    "args": [
+                        {
+                            "name": "contact",
+                            "type": "Contact"
+                        }
+                    ],
+                    "optional": false,
+                    "returnType": "void",
+                    "typeParameters": [],
+                    "line": 26,
+                    "jsdoctags": [
+                        {
+                            "name": "contact",
+                            "type": "Contact",
+                            "tagName": {
+                                "text": "param"
+                            }
+                        }
+                    ]
+                }
+            ],
+            "description": "",
+            "sourceCode": "import {Injectable} from '@angular/core';\nimport {HttpClient} from '@angular/common/http';\nimport {Contact} from '../model/contact';\nimport {catchError, tap} from 'rxjs/operators';\nimport {Observable, throwError} from 'rxjs';\n\n@Injectable({\n  providedIn: 'root'\n})\nexport class ContactService {\n\n  contactUrl = 'http://localhost:8080/api/contacts';\n  emailUrl = 'http://localhost:8080/api/sendEmail';\n\n  constructor(private http: HttpClient) {\n  }\n\n  getContacts(): Observable<Contact[]> {\n    return this.http.get<Contact[]>(this.contactUrl)\n      .pipe(\n        tap(data => console.log(JSON.stringify(data))),\n        catchError(this.handleError)\n      );\n  }\n\n  setContacts(contact: Contact) {\n    this.http.post(this.contactUrl, contact).subscribe(\n      (res) => console.log(res),\n      (err) => console.error(err)\n    );\n  }\n\n  sendEmail() {\n    this.http.get(this.emailUrl)\n      .pipe(\n        tap(data => console.log(JSON.stringify(data))),\n        catchError(this.handleError)\n      );\n  }\n\n  private handleError(err) {\n    let errorMessage: string;\n    if (err.error instanceof ErrorEvent) {\n      errorMessage = `An error occurred: ${err.error.message}`;\n    } else {\n      errorMessage = `Backend returned code ${err.status}: ${err.body.error}`;\n    }\n    console.error(err);\n    return throwError(errorMessage);\n  }\n}\n",
+            "constructorObj": {
+                "name": "constructor",
+                "description": "",
+                "args": [
+                    {
+                        "name": "http",
+                        "type": "HttpClient"
+                    }
+                ],
+                "line": 13,
+                "jsdoctags": [
+                    {
+                        "name": "http",
+                        "type": "HttpClient",
+                        "tagName": {
+                            "text": "param"
+                        }
+                    }
+                ]
+            },
+            "type": "injectable"
+        },
+        {
+            "name": "UserService",
+            "id": "injectable-UserService-41cffe12dad40e7fd23560f8a0c996d4",
+            "file": "src/app/service/user.service.ts",
+            "properties": [
+                {
+                    "name": "userUrl",
+                    "defaultValue": "'http://localhost:8080/api/users'",
+                    "type": "string",
+                    "optional": false,
+                    "description": "",
+                    "line": 12
+                }
+            ],
+            "methods": [
+                {
+                    "name": "getUsers",
+                    "args": [],
+                    "optional": false,
+                    "returnType": "Observable<User[]>",
+                    "typeParameters": [],
+                    "line": 17
+                },
+                {
+                    "name": "handleError",
+                    "args": [
+                        {
+                            "name": "err",
+                            "type": ""
+                        }
+                    ],
+                    "optional": false,
+                    "returnType": "any",
+                    "typeParameters": [],
+                    "line": 31,
+                    "modifierKind": [
+                        112
+                    ],
+                    "jsdoctags": [
+                        {
+                            "name": "err",
+                            "type": "",
+                            "tagName": {
+                                "text": "param"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "setUsers",
+                    "args": [
+                        {
+                            "name": "user",
+                            "type": "User"
+                        }
+                    ],
+                    "optional": false,
+                    "returnType": "void",
+                    "typeParameters": [],
+                    "line": 25,
+                    "jsdoctags": [
+                        {
+                            "name": "user",
+                            "type": "User",
+                            "tagName": {
+                                "text": "param"
+                            }
+                        }
+                    ]
+                }
+            ],
+            "description": "",
+            "sourceCode": "import {Injectable} from '@angular/core';\nimport {HttpClient} from '@angular/common/http';\nimport {Observable, throwError} from 'rxjs';\nimport {User} from '../model/user';\nimport {catchError} from 'rxjs/operators';\n\n@Injectable({\n  providedIn: 'root'\n})\nexport class UserService {\n\n  userUrl = 'http://localhost:8080/api/users';\n\n  constructor(private http: HttpClient) {\n  }\n\n  getUsers(): Observable<User[]> {\n    return this.http.get<User[]>(this.userUrl)\n      .pipe(\n        catchError(this.handleError)\n      );\n\n  }\n\n  setUsers(user: User) {\n    this.http.post(this.userUrl, user).subscribe(\n      (err) => console.error(err)\n    );\n  }\n\n  private handleError(err) {\n    let errorMessage: string;\n    if (err.error instanceof ErrorEvent) {\n      errorMessage = `An error occurred: ${err.error.message}`;\n    } else {\n      errorMessage = `Backend returned code ${err.status}: ${err.body.error}`;\n    }\n    console.error(err);\n    return throwError(errorMessage);\n  }\n}\n",
+            "constructorObj": {
+                "name": "constructor",
+                "description": "",
+                "args": [
+                    {
+                        "name": "http",
+                        "type": "HttpClient"
+                    }
+                ],
+                "line": 12,
+                "jsdoctags": [
+                    {
+                        "name": "http",
+                        "type": "HttpClient",
+                        "tagName": {
+                            "text": "param"
+                        }
+                    }
+                ]
+            },
+            "type": "injectable"
+        }
+    ],
+    "classes": [
+        {
+            "name": "AppPage",
+            "id": "class-AppPage-4ee91dad524760153d3c0f6f0014153c",
+            "file": "e2e/src/app.po.ts",
+            "type": "class",
+            "sourceCode": "import { browser, by, element } from 'protractor';\n\nexport class AppPage {\n  navigateTo() {\n    return browser.get(browser.baseUrl) as Promise<any>;\n  }\n\n  getTitleText() {\n    return element(by.css('app-root .content span')).getText() as Promise<string>;\n  }\n}\n",
+            "properties": [],
+            "methods": [
+                {
+                    "name": "getTitleText",
+                    "args": [],
+                    "optional": false,
+                    "returnType": "any",
+                    "typeParameters": [],
+                    "line": 8
+                },
+                {
+                    "name": "navigateTo",
+                    "args": [],
+                    "optional": false,
+                    "returnType": "any",
+                    "typeParameters": [],
+                    "line": 4
+                }
+            ],
+            "indexSignatures": [],
+            "inputsClass": [],
+            "outputsClass": [],
+            "hostBindings": [],
+            "hostListeners": []
+        },
+        {
+            "name": "Contact",
+            "id": "class-Contact-5de8198a74771324221debfda543ceba",
+            "file": "src/app/model/contact.ts",
+            "type": "class",
+            "sourceCode": "export class Contact {\n  id: string;\n  userId: string;\n  productName: string;\n  openingDate: string;\n  expirationDate: string;\n  contactType: string;\n  isExpired: boolean;\n  isNotificationOn: boolean;\n}\n",
+            "properties": [
+                {
+                    "name": "contactType",
+                    "type": "string",
+                    "optional": false,
+                    "description": "",
+                    "line": 7
+                },
+                {
+                    "name": "expirationDate",
+                    "type": "string",
+                    "optional": false,
+                    "description": "",
+                    "line": 6
+                },
+                {
+                    "name": "id",
+                    "type": "string",
+                    "optional": false,
+                    "description": "",
+                    "line": 2
+                },
+                {
+                    "name": "isExpired",
+                    "type": "boolean",
+                    "optional": false,
+                    "description": "",
+                    "line": 8
+                },
+                {
+                    "name": "isNotificationOn",
+                    "type": "boolean",
+                    "optional": false,
+                    "description": "",
+                    "line": 9
+                },
+                {
+                    "name": "openingDate",
+                    "type": "string",
+                    "optional": false,
+                    "description": "",
+                    "line": 5
+                },
+                {
+                    "name": "productName",
+                    "type": "string",
+                    "optional": false,
+                    "description": "",
+                    "line": 4
+                },
+                {
+                    "name": "userId",
+                    "type": "string",
+                    "optional": false,
+                    "description": "",
+                    "line": 3
+                }
+            ],
+            "methods": [],
+            "indexSignatures": [],
+            "inputsClass": [],
+            "outputsClass": [],
+            "hostBindings": [],
+            "hostListeners": []
+        },
+        {
+            "name": "Login",
+            "id": "class-Login-4d80b6c66b9fe47813b68f68cf10312e",
+            "file": "src/app/user/state/user.actions.ts",
+            "type": "class",
+            "sourceCode": "import {Action} from '@ngrx/store';\n\nexport enum UserActionTypes {\n  login = '[User] Log In'\n}\n\nexport class Login implements Action {\n  readonly type = UserActionTypes.login;\n\n  constructor(public payload: boolean) {\n  }\n}\n\nexport type UserActions = Login;\n",
+            "constructorObj": {
+                "name": "constructor",
+                "description": "",
+                "args": [
+                    {
+                        "name": "payload",
+                        "type": "boolean"
+                    }
+                ],
+                "line": 8,
+                "jsdoctags": [
+                    {
+                        "name": "payload",
+                        "type": "boolean",
+                        "tagName": {
+                            "text": "param"
+                        }
+                    }
+                ]
+            },
+            "properties": [
+                {
+                    "name": "payload",
+                    "type": "boolean",
+                    "optional": false,
+                    "description": "",
+                    "line": 10,
+                    "modifierKind": [
+                        114
+                    ]
+                },
+                {
+                    "name": "type",
+                    "defaultValue": "UserActionTypes.login",
+                    "type": "",
+                    "optional": false,
+                    "description": "",
+                    "line": 8,
+                    "modifierKind": [
+                        132
+                    ]
+                }
+            ],
+            "methods": [],
+            "indexSignatures": [],
+            "inputsClass": [],
+            "outputsClass": [],
+            "hostBindings": [],
+            "hostListeners": [],
+            "implements": [
+                "Action"
+            ]
+        },
+        {
+            "name": "User",
+            "id": "class-User-26826feaf6c4c22d4251df27f28bef43",
+            "file": "src/app/model/user.ts",
+            "type": "class",
+            "sourceCode": "export class User {\n  id: string;\n  username: string;\n  password: string;\n  firstName: string;\n  lastName: string;\n  email: string;\n}\n",
+            "properties": [
+                {
+                    "name": "email",
+                    "type": "string",
+                    "optional": false,
+                    "description": "",
+                    "line": 7
+                },
+                {
+                    "name": "firstName",
+                    "type": "string",
+                    "optional": false,
+                    "description": "",
+                    "line": 5
+                },
+                {
+                    "name": "id",
+                    "type": "string",
+                    "optional": false,
+                    "description": "",
+                    "line": 2
+                },
+                {
+                    "name": "lastName",
+                    "type": "string",
+                    "optional": false,
+                    "description": "",
+                    "line": 6
+                },
+                {
+                    "name": "password",
+                    "type": "string",
+                    "optional": false,
+                    "description": "",
+                    "line": 4
+                },
+                {
+                    "name": "username",
+                    "type": "string",
+                    "optional": false,
+                    "description": "",
+                    "line": 3
+                }
+            ],
+            "methods": [],
+            "indexSignatures": [],
+            "inputsClass": [],
+            "outputsClass": [],
+            "hostBindings": [],
+            "hostListeners": []
+        }
+    ],
+    "directives": [],
+    "components": [
+        {
+            "name": "AppComponent",
+            "id": "component-AppComponent-2b480873b71511070376c8955ee8e3c9",
+            "file": "src/app/app.component.ts",
+            "encapsulation": [],
+            "entryComponents": [],
+            "inputs": [],
+            "outputs": [],
+            "providers": [],
+            "selector": "app-root",
+            "styleUrls": [
+                "./app.component.scss"
+            ],
+            "styles": [],
+            "templateUrl": [
+                "./app.component.html"
+            ],
+            "viewProviders": [],
+            "inputsClass": [],
+            "outputsClass": [],
+            "propertiesClass": [
+                {
+                    "name": "title",
+                    "defaultValue": "'contact-me-app'",
+                    "type": "string",
+                    "optional": false,
+                    "description": "",
+                    "line": 9
+                }
+            ],
+            "methodsClass": [],
+            "hostBindings": [],
+            "hostListeners": [],
+            "description": "",
+            "rawdescription": "",
+            "type": "component",
+            "sourceCode": "import { Component } from '@angular/core';\n\n@Component({\n  selector: 'app-root',\n  templateUrl: './app.component.html',\n  styleUrls: ['./app.component.scss']\n})\nexport class AppComponent {\n  title = 'contact-me-app';\n}\n",
+            "assetsDirs": [],
+            "styleUrlsData": [
+                {
+                    "data": "",
+                    "styleUrl": "./app.component.scss"
+                }
+            ],
+            "stylesData": "",
+            "templateData": "<nav class=\"navbar navbar-expand-lg navbar-light bg-light\">\n  <a class=\"navbar-brand\" href=\"#\">Contact Me</a>\n  <button class=\"navbar-toggler\" type=\"button\" data-toggle=\"collapse\" data-target=\"#navbarNav\" aria-controls=\"navbarNav\"\n          aria-expanded=\"false\" aria-label=\"Toggle navigation\">\n    <span class=\"navbar-toggler-icon\"></span>\n  </button>\n  <div class=\"collapse navbar-collapse\" id=\"navbarNav\">\n    <ul class=\"navbar-nav\">\n      <li class=\"nav-item active\">\n        <a class=\"nav-link\" href=\"#\">Home <span class=\"sr-only\">(current)</span></a>\n      </li>\n      <li class=\"nav-item\">\n        <a class=\"nav-link\" [routerLink]=\"['/contacts']\">Contacts</a>\n      </li>\n      <li class=\"nav-item\">\n        <a class=\"nav-link\" [routerLink]=\"['/edit']\">Edit</a>\n      </li>\n    </ul>\n  </div>\n\n  <div class=\"collapse navbar-collapse\" id=\"navbarNavRight\">\n    <ul class=\"navbar-nav ml-auto\">\n      <li class=\"nav-item\">\n        <a class=\"nav-link \" href=\"#\">Settings</a>\n      </li>\n    </ul>\n  </div>\n</nav>\n\n<div class=\"container-sm\">\n  <router-outlet></router-outlet>\n</div>\n\n"
+        },
+        {
+            "name": "ButtonComponent",
+            "id": "component-ButtonComponent-642c6c4e474cd5a0ac760dfda26b2fc9",
+            "file": "src/stories/button.component.ts",
+            "encapsulation": [],
+            "entryComponents": [],
+            "inputs": [],
+            "outputs": [],
+            "providers": [],
+            "selector": "storybook-button",
+            "styleUrls": [
+                "./button.css"
+            ],
+            "styles": [],
+            "template": "<button   type=\"button\"\n   (click)=\"onClick.emit($event)\"\n   [ngClass]=\"classes\"\n   [ngStyle]=\"{ 'background-color': backgroundColor }\"\n >\n   {{ label }}\n </button>",
+            "templateUrl": [],
+            "viewProviders": [],
+            "inputsClass": [
+                {
+                    "name": "backgroundColor",
+                    "description": "<p>What background color to use</p>\n",
+                    "line": 26,
+                    "type": "string"
+                },
+                {
+                    "name": "label",
+                    "defaultValue": "'Button'",
+                    "description": "<p>Button contents</p>\n",
+                    "line": 40
+                },
+                {
+                    "name": "primary",
+                    "defaultValue": "false",
+                    "description": "<p>Is this the principal call to action on the page?</p>\n",
+                    "line": 20
+                },
+                {
+                    "name": "size",
+                    "defaultValue": "'medium'",
+                    "description": "<p>How large should the button be?</p>\n",
+                    "line": 32,
+                    "type": "\"small\" | \"medium\" | \"large\""
+                }
+            ],
+            "outputsClass": [
+                {
+                    "name": "onClick",
+                    "defaultValue": "new EventEmitter<Event>()",
+                    "description": "<p>Optional click handler</p>\n",
+                    "line": 46,
+                    "type": "EventEmitter"
+                }
+            ],
+            "propertiesClass": [],
+            "methodsClass": [],
+            "hostBindings": [],
+            "hostListeners": [],
+            "description": "",
+            "rawdescription": "",
+            "type": "component",
+            "sourceCode": "import { Component, Input, Output, EventEmitter } from '@angular/core';\n\n@Component({\n  selector: 'storybook-button',\n  template: ` <button\n    type=\"button\"\n    (click)=\"onClick.emit($event)\"\n    [ngClass]=\"classes\"\n    [ngStyle]=\"{ 'background-color': backgroundColor }\"\n  >\n    {{ label }}\n  </button>`,\n  styleUrls: ['./button.css'],\n})\nexport default class ButtonComponent {\n  /**\n   * Is this the principal call to action on the page?\n   */\n  @Input()\n  primary = false;\n\n  /**\n   * What background color to use\n   */\n  @Input()\n  backgroundColor?: string;\n\n  /**\n   * How large should the button be?\n   */\n  @Input()\n  size: 'small' | 'medium' | 'large' = 'medium';\n\n  /**\n   * Button contents\n   *\n   * @required\n   */\n  @Input()\n  label = 'Button';\n\n  /**\n   * Optional click handler\n   */\n  @Output()\n  onClick = new EventEmitter<Event>();\n\n  public get classes(): string[] {\n    const mode = this.primary ? 'storybook-button--primary' : 'storybook-button--secondary';\n\n    return ['storybook-button', `storybook-button--${this.size}`, mode];\n  }\n}\n",
+            "assetsDirs": [],
+            "styleUrlsData": [
+                {
+                    "data": ".storybook-button {\n  font-family: 'Nunito Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;\n  font-weight: 700;\n  border: 0;\n  border-radius: 3em;\n  cursor: pointer;\n  display: inline-block;\n  line-height: 1;\n}\n.storybook-button--primary {\n  color: white;\n  background-color: #1ea7fd;\n}\n.storybook-button--secondary {\n  color: #333;\n  background-color: transparent;\n  box-shadow: rgba(0, 0, 0, 0.15) 0px 0px 0px 1px inset;\n}\n.storybook-button--small {\n  font-size: 12px;\n  padding: 10px 16px;\n}\n.storybook-button--medium {\n  font-size: 14px;\n  padding: 11px 20px;\n}\n.storybook-button--large {\n  font-size: 16px;\n  padding: 12px 24px;\n}\n",
+                    "styleUrl": "./button.css"
+                }
+            ],
+            "stylesData": "",
+            "accessors": {
+                "classes": {
+                    "name": "classes",
+                    "getSignature": {
+                        "name": "classes",
+                        "type": "[]",
+                        "returnType": "string[]",
+                        "line": 48
+                    }
+                }
+            }
+        },
+        {
+            "name": "ContactEditComponent",
+            "id": "component-ContactEditComponent-b6f53ffa7aa8e6ae0628b023c8dbee68",
+            "file": "src/app/contacts/contact-edit.component.ts",
+            "encapsulation": [],
+            "entryComponents": [],
+            "inputs": [],
+            "outputs": [],
+            "providers": [],
+            "selector": "app-contact-edit",
+            "styleUrls": [
+                "./contact-edit.component.scss"
+            ],
+            "styles": [],
+            "templateUrl": [
+                "./contact-edit.component.html"
+            ],
+            "viewProviders": [],
+            "inputsClass": [],
+            "outputsClass": [],
+            "propertiesClass": [
+                {
+                    "name": "contactForm",
+                    "type": "FormGroup",
+                    "optional": false,
+                    "description": "",
+                    "line": 13
+                }
+            ],
+            "methodsClass": [
+                {
+                    "name": "ngOnInit",
+                    "args": [],
+                    "optional": false,
+                    "returnType": "void",
+                    "typeParameters": [],
+                    "line": 21
+                },
+                {
+                    "name": "save",
+                    "args": [],
+                    "optional": false,
+                    "returnType": "void",
+                    "typeParameters": [],
+                    "line": 30
+                }
+            ],
+            "hostBindings": [],
+            "hostListeners": [],
+            "description": "",
+            "rawdescription": "",
+            "type": "component",
+            "sourceCode": "import {Component, OnInit} from '@angular/core';\nimport {ContactService} from '../service/contact.service';\nimport {Contact} from '../model/contact';\nimport {FormArray, FormBuilder, FormGroup} from '@angular/forms';\n\n@Component({\n  selector: 'app-contact-edit',\n  templateUrl: './contact-edit.component.html',\n  styleUrls: ['./contact-edit.component.scss']\n})\nexport class ContactEditComponent implements OnInit {\n\n  contactForm: FormGroup;\n\n  constructor(private fb: FormBuilder, private contactService: ContactService) {\n  }\n\n  get contacts() {\n    return this.contactForm.get('contacts') as FormArray;\n  }\n  ngOnInit() {\n    this.contactForm = this.fb.group({\n      productName: '',\n      contactType: 'yearly',\n      openingDate: '',\n      isNotificationOn: true\n    });\n  }\n\n  save() {\n    console.log(this.contactForm.getRawValue() as Contact);\n    const contact = new Contact();\n    contact.productName = this.contactForm.get('productName').value;\n    contact.contactType = this.contactForm.get('contactType').value;\n    contact.openingDate = this.contactForm.get('openingDate').value;\n    contact.isNotificationOn = this.contactForm.get('isNotificationOn').value;\n    this.contactService.setContacts(contact);\n  }\n}\n",
+            "assetsDirs": [],
+            "styleUrlsData": [
+                {
+                    "data": "::ng-deep .cdk-overlay-container mat-datepicker-content {\n  z-index: 2000;\n}\n",
+                    "styleUrl": "./contact-edit.component.scss"
+                }
+            ],
+            "stylesData": "",
+            "constructorObj": {
+                "name": "constructor",
+                "description": "",
+                "args": [
+                    {
+                        "name": "fb",
+                        "type": "FormBuilder"
+                    },
+                    {
+                        "name": "contactService",
+                        "type": "ContactService"
+                    }
+                ],
+                "line": 13,
+                "jsdoctags": [
+                    {
+                        "name": "fb",
+                        "type": "FormBuilder",
+                        "tagName": {
+                            "text": "param"
+                        }
+                    },
+                    {
+                        "name": "contactService",
+                        "type": "ContactService",
+                        "tagName": {
+                            "text": "param"
+                        }
+                    }
+                ]
+            },
+            "implements": [
+                "OnInit"
+            ],
+            "accessors": {
+                "contacts": {
+                    "name": "contacts",
+                    "getSignature": {
+                        "name": "contacts",
+                        "type": "",
+                        "returnType": "",
+                        "line": 18
+                    }
+                }
+            },
+            "templateData": "<div class=\"container-fluid ml-2 mt-3\">\n  <form (ngSubmit)=\"save()\" [formGroup]=\"contactForm\">\n    <div class=\"form-group row\">\n      <div class=\"col-sm-2\">\n        <label for=\"productName\" class=\"col-form-label col-sm-1 pl-0\">Product</label>\n      </div>\n      <div class=\"col-sm-3\">\n        <input id=\"productName\" type=\"text\" class=\"form-control\" formControlName=\"productName\">\n      </div>\n    </div>\n\n    <div class=\"form-group row\">\n      <div class=\"col-sm-2\">\n        <label class=\"col-form-label col-sm-1 pl-0\">Type</label>\n      </div>\n      <div class=\"col-sm-4\">\n        <div class=\"form-check form-check-inline\">\n          <input class=\"form-check-input\" type=\"radio\" id=\"yearly\" value=\"yearly\" formControlName=\"contactType\">\n          <label class=\"form-check-label\" for=\"yearly\">\n            Yearly\n          </label>\n        </div>\n        <div class=\"form-check form-check-inline\">\n          <input class=\"form-check-input\" type=\"radio\" id=\"monthly\" value=\"monthly\" formControlName=\"contactType\">\n          <label class=\"form-check-label\" for=\"monthly\">\n            Monthly\n          </label>\n        </div>\n        <div class=\"form-check form-check-inline\">\n          <input class=\"form-check-input\" type=\"radio\" id=\"biweekly\" value=\"biweekly\" formControlName=\"contactType\">\n          <label class=\"form-check-label\" for=\"biweekly\">\n            Bi-weekly\n          </label>\n        </div>\n        <div class=\"form-check form-check-inline\">\n          <input class=\"form-check-input\" type=\"radio\" id=\"daily\" value=\"daily\" formControlName=\"contactType\">\n          <label class=\"form-check-label\" for=\"daily\">\n            Daily\n          </label>\n        </div>\n      </div>\n    </div>\n\n    <div class=\"form-group row\">\n      <div class=\"col-sm-2\">\n        <label class=\"col-form-label pl-0 pt-4 align-bottom\">Open Date</label>\n      </div>\n      <mat-form-field class=\"pl-3\">\n        <mat-label>Choose a date</mat-label>\n        <input matInput [matDatepicker]=\"myDatepicker\" formControlName=\"openingDate\">\n        <mat-datepicker-toggle matSuffix [for]=\"myDatepicker\"></mat-datepicker-toggle>\n        <mat-datepicker #myDatepicker></mat-datepicker>\n      </mat-form-field>\n    </div>\n\n    <div class=\"form-group row\">\n      <div class=\"col-sm-6 ml-4\">\n        <input type=\"checkbox\" class=\"custom-control-input\" id=\"emailNotification\" formControlName=\"isNotificationOn\">\n        <label class=\"custom-control-label\" for=\"emailNotification\">Receive Email Notification</label>\n      </div>\n    </div>\n\n    <button type=\"submit\" class=\"btn btn-primary\">Save</button>\n    <button type=\"button\" class=\"btn btn-secondary\">Cancel</button>\n  </form>\n</div>\n"
+        },
+        {
+            "name": "ContactsComponent",
+            "id": "component-ContactsComponent-1b4edd729a3c5f42955ae7eb04f53f7f",
+            "file": "src/app/contacts/contacts.component.ts",
+            "encapsulation": [],
+            "entryComponents": [],
+            "inputs": [],
+            "outputs": [],
+            "providers": [],
+            "selector": "app-contacts",
+            "styleUrls": [
+                "./contacts.component.scss"
+            ],
+            "styles": [],
+            "templateUrl": [
+                "./contacts.component.html"
+            ],
+            "viewProviders": [],
+            "inputsClass": [],
+            "outputsClass": [],
+            "propertiesClass": [
+                {
+                    "name": "contacts",
+                    "type": "Contact[]",
+                    "optional": false,
+                    "description": "",
+                    "line": 12
+                }
+            ],
+            "methodsClass": [
+                {
+                    "name": "handleOnclick",
+                    "args": [],
+                    "optional": false,
+                    "returnType": "void",
+                    "typeParameters": [],
+                    "line": 24
+                },
+                {
+                    "name": "ngOnInit",
+                    "args": [],
+                    "optional": false,
+                    "returnType": "void",
+                    "typeParameters": [],
+                    "line": 21
+                }
+            ],
+            "hostBindings": [],
+            "hostListeners": [],
+            "description": "",
+            "rawdescription": "",
+            "type": "component",
+            "sourceCode": "import {Component, OnInit} from '@angular/core';\nimport {Contact} from '../model/contact';\nimport {ContactService} from '../service/contact.service';\n\n@Component({\n  selector: 'app-contacts',\n  templateUrl: './contacts.component.html',\n  styleUrls: ['./contacts.component.scss']\n})\nexport class ContactsComponent implements OnInit {\n\n  contacts: Contact[];\n\n  constructor(private contactService: ContactService) {\n    this.contactService.getContacts()\n      .subscribe((data: Contact[]) => {\n        this.contacts = data;\n      });\n  }\n\n  ngOnInit() {\n  }\n\n  handleOnclick() {\n    this.contactService.sendEmail();\n  }\n}\n",
+            "assetsDirs": [],
+            "styleUrlsData": [
+                {
+                    "data": "",
+                    "styleUrl": "./contacts.component.scss"
+                }
+            ],
+            "stylesData": "",
+            "constructorObj": {
+                "name": "constructor",
+                "description": "",
+                "args": [
+                    {
+                        "name": "contactService",
+                        "type": "ContactService"
+                    }
+                ],
+                "line": 12,
+                "jsdoctags": [
+                    {
+                        "name": "contactService",
+                        "type": "ContactService",
+                        "tagName": {
+                            "text": "param"
+                        }
+                    }
+                ]
+            },
+            "implements": [
+                "OnInit"
+            ],
+            "templateData": "<table class=\"table\">\n  <thead class=\"thead-dark\">\n  <tr>\n    <th scope=\"col\"></th>\n    <th scope=\"col\">#</th>\n    <th scope=\"col\">Product Name</th>\n    <th scope=\"col\">Opening Date</th>\n    <th scope=\"col\">Expiration Date</th>\n    <th scope=\"col\">Contact Type</th>\n    <th scope=\"col\">Email Notification</th>\n    <th scope=\"col\">Expired</th>\n  </tr>\n  </thead>\n  <tbody>\n  <tr *ngFor=\"let contact of contacts; let i = index;\">\n    <td><input type=\"checkbox\"/></td>\n    <td>{{i + 1}}</td>\n    <td>{{contact.productName}}</td>\n    <td>{{contact.openingDate}}</td>\n    <td>{{contact.expirationDate}}</td>\n    <td>{{contact.contactType}}</td>\n    <td>{{contact.isNotificationOn}}</td>\n    <td>{{contact.isExpired}}</td>\n    <td></td>\n  </tr>\n  </tbody>\n</table>\n\n\n<button type=\"button\" class=\"btn btn-primary\" (click)=\"handleOnclick()\">Send Email</button>\n"
+        },
+        {
+            "name": "HeaderComponent",
+            "id": "component-HeaderComponent-246e2a69dc126a3bd76c6328dd3b93e2",
+            "file": "src/stories/header.component.ts",
+            "encapsulation": [],
+            "entryComponents": [],
+            "inputs": [],
+            "outputs": [],
+            "providers": [],
+            "selector": "storybook-header",
+            "styleUrls": [
+                "./header.css"
+            ],
+            "styles": [],
+            "template": "<header>    <div class=\"wrapper\">\n      <div>\n        <svg width=\"32\" height=\"32\" viewBox=\"0 0 32 32\" xmlns=\"http://www.w3.org/2000/svg\">\n          <g fill=\"none\" fillRule=\"evenodd\">\n            <path\n              d=\"M10 0h12a10 10 0 0110 10v12a10 10 0 01-10 10H10A10 10 0 010 22V10A10 10 0 0110 0z\"\n              fill=\"#FFF\"\n            />\n            <path\n              d=\"M5.3 10.6l10.4 6v11.1l-10.4-6v-11zm11.4-6.2l9.7 5.5-9.7 5.6V4.4z\"\n              fill=\"#555AB9\"\n            />\n            <path\n              d=\"M27.2 10.6v11.2l-10.5 6V16.5l10.5-6zM15.7 4.4v11L6 10l9.7-5.5z\"\n              fill=\"#91BAF8\"\n            />\n          </g>\n        </svg>\n        <h1>Acme</h1>\n      </div>\n      <div>\n        <storybook-button\n          *ngIf=\"user\"\n          size=\"small\"\n          (onClick)=\"onLogout.emit($event)\"\n          label=\"Log out\"\n        ></storybook-button>\n        <storybook-button\n          *ngIf=\"!user\"\n          size=\"small\"\n          (onClick)=\"onLogin.emit($event)\"\n          label=\"Log in\"\n        ></storybook-button>\n        <storybook-button\n          *ngIf=\"!user\"\n          primary\n          size=\"small\"\n          (onClick)=\"onCreateAccount.emit($event)\"\n          label=\"Sign up\"\n        ></storybook-button>\n      </div>\n    </div>\n  </header>",
+            "templateUrl": [],
+            "viewProviders": [],
+            "inputsClass": [
+                {
+                    "name": "user",
+                    "defaultValue": "null",
+                    "line": 53,
+                    "type": "unknown"
+                }
+            ],
+            "outputsClass": [
+                {
+                    "name": "onCreateAccount",
+                    "defaultValue": "new EventEmitter<Event>()",
+                    "line": 62,
+                    "type": "EventEmitter"
+                },
+                {
+                    "name": "onLogin",
+                    "defaultValue": "new EventEmitter<Event>()",
+                    "line": 56,
+                    "type": "EventEmitter"
+                },
+                {
+                    "name": "onLogout",
+                    "defaultValue": "new EventEmitter<Event>()",
+                    "line": 59,
+                    "type": "EventEmitter"
+                }
+            ],
+            "propertiesClass": [],
+            "methodsClass": [],
+            "hostBindings": [],
+            "hostListeners": [],
+            "description": "",
+            "rawdescription": "",
+            "type": "component",
+            "sourceCode": "import { Component, Input, Output, EventEmitter } from '@angular/core';\n\n@Component({\n  selector: 'storybook-header',\n  template: `<header>\n    <div class=\"wrapper\">\n      <div>\n        <svg width=\"32\" height=\"32\" viewBox=\"0 0 32 32\" xmlns=\"http://www.w3.org/2000/svg\">\n          <g fill=\"none\" fillRule=\"evenodd\">\n            <path\n              d=\"M10 0h12a10 10 0 0110 10v12a10 10 0 01-10 10H10A10 10 0 010 22V10A10 10 0 0110 0z\"\n              fill=\"#FFF\"\n            />\n            <path\n              d=\"M5.3 10.6l10.4 6v11.1l-10.4-6v-11zm11.4-6.2l9.7 5.5-9.7 5.6V4.4z\"\n              fill=\"#555AB9\"\n            />\n            <path\n              d=\"M27.2 10.6v11.2l-10.5 6V16.5l10.5-6zM15.7 4.4v11L6 10l9.7-5.5z\"\n              fill=\"#91BAF8\"\n            />\n          </g>\n        </svg>\n        <h1>Acme</h1>\n      </div>\n      <div>\n        <storybook-button\n          *ngIf=\"user\"\n          size=\"small\"\n          (onClick)=\"onLogout.emit($event)\"\n          label=\"Log out\"\n        ></storybook-button>\n        <storybook-button\n          *ngIf=\"!user\"\n          size=\"small\"\n          (onClick)=\"onLogin.emit($event)\"\n          label=\"Log in\"\n        ></storybook-button>\n        <storybook-button\n          *ngIf=\"!user\"\n          primary\n          size=\"small\"\n          (onClick)=\"onCreateAccount.emit($event)\"\n          label=\"Sign up\"\n        ></storybook-button>\n      </div>\n    </div>\n  </header>`,\n  styleUrls: ['./header.css'],\n})\nexport default class HeaderComponent {\n  @Input()\n  user: unknown = null;\n\n  @Output()\n  onLogin = new EventEmitter<Event>();\n\n  @Output()\n  onLogout = new EventEmitter<Event>();\n\n  @Output()\n  onCreateAccount = new EventEmitter<Event>();\n}\n",
+            "assetsDirs": [],
+            "styleUrlsData": [
+                {
+                    "data": ".wrapper {\n  font-family: 'Nunito Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;\n  border-bottom: 1px solid rgba(0, 0, 0, 0.1);\n  padding: 15px 20px;\n  display: flex;\n  align-items: center;\n  justify-content: space-between;\n}\n\nsvg {\n  display: inline-block;\n  vertical-align: top;\n}\n\nh1 {\n  font-weight: 900;\n  font-size: 20px;\n  line-height: 1;\n  margin: 6px 0 6px 10px;\n  display: inline-block;\n  vertical-align: top;\n}\n\nbutton + button {\n  margin-left: 10px;\n}\n",
+                    "styleUrl": "./header.css"
+                }
+            ],
+            "stylesData": ""
+        },
+        {
+            "name": "HomeComponent",
+            "id": "component-HomeComponent-47533633ac270cd3eb22735ea50d2806",
+            "file": "src/app/home/home.component.ts",
+            "encapsulation": [],
+            "entryComponents": [],
+            "inputs": [],
+            "outputs": [],
+            "providers": [],
+            "selector": "app-home",
+            "styleUrls": [
+                "./home.component.scss"
+            ],
+            "styles": [],
+            "templateUrl": [
+                "./home.component.html"
+            ],
+            "viewProviders": [],
+            "inputsClass": [],
+            "outputsClass": [],
+            "propertiesClass": [
+                {
+                    "name": "alt",
+                    "defaultValue": "'Contact me logo'",
+                    "type": "string",
+                    "optional": false,
+                    "description": "",
+                    "line": 12
+                },
+                {
+                    "name": "catImg",
+                    "defaultValue": "null",
+                    "type": "null",
+                    "optional": false,
+                    "description": "",
+                    "line": 14
+                },
+                {
+                    "name": "imgPath",
+                    "defaultValue": "'../assets/ContactMe.jpg'",
+                    "type": "string",
+                    "optional": false,
+                    "description": "",
+                    "line": 11
+                },
+                {
+                    "name": "isCatShowing",
+                    "defaultValue": "false",
+                    "type": "",
+                    "optional": false,
+                    "description": "",
+                    "line": 15
+                }
+            ],
+            "methodsClass": [
+                {
+                    "name": "createImageFromBlob",
+                    "args": [
+                        {
+                            "name": "image",
+                            "type": "Blob"
+                        }
+                    ],
+                    "optional": false,
+                    "returnType": "void",
+                    "typeParameters": [],
+                    "line": 36,
+                    "jsdoctags": [
+                        {
+                            "name": "image",
+                            "type": "Blob",
+                            "tagName": {
+                                "text": "param"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "ngOnInit",
+                    "args": [],
+                    "optional": false,
+                    "returnType": "void",
+                    "typeParameters": [],
+                    "line": 20
+                },
+                {
+                    "name": "onClick",
+                    "args": [],
+                    "optional": false,
+                    "returnType": "void",
+                    "typeParameters": [],
+                    "line": 23
+                },
+                {
+                    "name": "onHideClick",
+                    "args": [],
+                    "optional": false,
+                    "returnType": "void",
+                    "typeParameters": [],
+                    "line": 32
+                }
+            ],
+            "hostBindings": [],
+            "hostListeners": [],
+            "description": "",
+            "rawdescription": "",
+            "type": "component",
+            "sourceCode": "import {Component, OnInit} from '@angular/core';\nimport {CatServiceService} from '../service/cat-service.service';\n\n@Component({\n  selector: 'app-home',\n  templateUrl: './home.component.html',\n  styleUrls: ['./home.component.scss']\n})\nexport class HomeComponent implements OnInit {\n\n  imgPath = '../assets/ContactMe.jpg';\n  alt = 'Contact me logo';\n\n  catImg = null;\n  isCatShowing = false;\n\n  constructor(private catService: CatServiceService) {\n  }\n\n  ngOnInit() {\n  }\n\n  onClick() {\n    this.catService.getCat().subscribe(data => {\n      this.createImageFromBlob(data);\n    }, error => {\n      console.log(error);\n    });\n    this.isCatShowing = true;\n  }\n\n  onHideClick() {\n    this.isCatShowing = false;\n  }\n\n  createImageFromBlob(image: Blob) {\n    const reader = new FileReader();\n    reader.addEventListener('load', () => {\n      this.catImg = reader.result;\n    }, false);\n\n    if (image) {\n      reader.readAsDataURL(image);\n    }\n  }\n}\n",
+            "assetsDirs": [],
+            "styleUrlsData": [
+                {
+                    "data": "",
+                    "styleUrl": "./home.component.scss"
+                }
+            ],
+            "stylesData": "",
+            "constructorObj": {
+                "name": "constructor",
+                "description": "",
+                "args": [
+                    {
+                        "name": "catService",
+                        "type": "CatServiceService"
+                    }
+                ],
+                "line": 15,
+                "jsdoctags": [
+                    {
+                        "name": "catService",
+                        "type": "CatServiceService",
+                        "tagName": {
+                            "text": "param"
+                        }
+                    }
+                ]
+            },
+            "implements": [
+                "OnInit"
+            ],
+            "templateData": "<div class=\"container\">\n  <div class=\"row\">\n    <div class=\"col-4\"><img style=\"width: 70%\" [src]=\"imgPath\" [alt]=\"alt\"></div>\n    <div class=\"col-8\">\n      <app-signup></app-signup>\n    </div>\n  </div>\n  <div class=\"row\">\n    <button type=\"button\" class=\"btn btn-primary\" (click)=\"onClick()\">Do you want a cat?</button>\n    <button type=\"button\" class=\"btn btn-secondary\" (click)=\"onHideClick()\">Bye cat!</button>\n  </div>\n  <div class=\"row\">\n    <div *ngIf=\"isCatShowing && catImg\">\n      <img [src]=\"catImg\">\n    </div>\n  </div>\n</div>\n"
+        },
+        {
+            "name": "PageComponent",
+            "id": "component-PageComponent-cca1a8911321fa17756ce90c90de65cc",
+            "file": "src/stories/page.component.ts",
+            "encapsulation": [],
+            "entryComponents": [],
+            "inputs": [],
+            "outputs": [],
+            "providers": [],
+            "selector": "storybook-page",
+            "styleUrls": [
+                "./page.css"
+            ],
+            "styles": [],
+            "template": "<article>    <storybook-header\n      [user]=\"user\"\n      (onLogout)=\"onLogout.emit($event)\"\n      (onLogin)=\"onLogin.emit($event)\"\n      (onCreateAccount)=\"onCreateAccount.emit($event)\"\n    ></storybook-header>\n    <section>\n      <h2>Pages in Storybook</h2>\n      <p>\n        We recommend building UIs with a\n        <a href=\"https://componentdriven.org\" target=\"_blank\" rel=\"noopener noreferrer\">\n          <strong>component-driven</strong>\n        </a>\n        process starting with atomic components and ending with pages.\n      </p>\n      <p>\n        Render pages with mock data. This makes it easy to build and review page states without\n        needing to navigate to them in your app. Here are some handy patterns for managing page data\n        in Storybook:\n      </p>\n      <ul>\n        <li>\n          Use a higher-level connected component. Storybook helps you compose such data from the\n          \"args\" of child component stories\n        </li>\n        <li>\n          Assemble data in the page component from your services. You can mock these services out\n          using Storybook.\n        </li>\n      </ul>\n      <p>\n        Get a guided tutorial on component-driven development at\n        <a href=\"https://www.learnstorybook.com\" target=\"_blank\" rel=\"noopener noreferrer\">\n          Learn Storybook\n        </a>\n        . Read more in the\n        <a href=\"https://storybook.js.org/docs\" target=\"_blank\" rel=\"noopener noreferrer\">\n          docs\n        </a>\n        .\n      </p>\n      <div class=\"tip-wrapper\">\n        <span class=\"tip\">Tip</span> Adjust the width of the canvas with the\n        <svg width=\"10\" height=\"10\" viewBox=\"0 0 12 12\" xmlns=\"http://www.w3.org/2000/svg\">\n          <g fill=\"none\" fillRule=\"evenodd\">\n            <path\n              d=\"M1.5 5.2h4.8c.3 0 .5.2.5.4v5.1c-.1.2-.3.3-.4.3H1.4a.5.5 0 01-.5-.4V5.7c0-.3.2-.5.5-.5zm0-2.1h6.9c.3 0 .5.2.5.4v7a.5.5 0 01-1 0V4H1.5a.5.5 0 010-1zm0-2.1h9c.3 0 .5.2.5.4v9.1a.5.5 0 01-1 0V2H1.5a.5.5 0 010-1zm4.3 5.2H2V10h3.8V6.2z\"\n              id=\"a\"\n              fill=\"#999\"\n            />\n          </g>\n        </svg>\n        Viewports addon in the toolbar\n      </div>\n    </section>\n  </article>",
+            "templateUrl": [],
+            "viewProviders": [],
+            "inputsClass": [
+                {
+                    "name": "user",
+                    "defaultValue": "null",
+                    "line": 66,
+                    "type": "unknown"
+                }
+            ],
+            "outputsClass": [
+                {
+                    "name": "onCreateAccount",
+                    "defaultValue": "new EventEmitter<Event>()",
+                    "line": 75,
+                    "type": "EventEmitter"
+                },
+                {
+                    "name": "onLogin",
+                    "defaultValue": "new EventEmitter<Event>()",
+                    "line": 69,
+                    "type": "EventEmitter"
+                },
+                {
+                    "name": "onLogout",
+                    "defaultValue": "new EventEmitter<Event>()",
+                    "line": 72,
+                    "type": "EventEmitter"
+                }
+            ],
+            "propertiesClass": [],
+            "methodsClass": [],
+            "hostBindings": [],
+            "hostListeners": [],
+            "description": "",
+            "rawdescription": "",
+            "type": "component",
+            "sourceCode": "import { Component, Input, Output, EventEmitter } from '@angular/core';\n\n@Component({\n  selector: 'storybook-page',\n  template: `<article>\n    <storybook-header\n      [user]=\"user\"\n      (onLogout)=\"onLogout.emit($event)\"\n      (onLogin)=\"onLogin.emit($event)\"\n      (onCreateAccount)=\"onCreateAccount.emit($event)\"\n    ></storybook-header>\n    <section>\n      <h2>Pages in Storybook</h2>\n      <p>\n        We recommend building UIs with a\n        <a href=\"https://componentdriven.org\" target=\"_blank\" rel=\"noopener noreferrer\">\n          <strong>component-driven</strong>\n        </a>\n        process starting with atomic components and ending with pages.\n      </p>\n      <p>\n        Render pages with mock data. This makes it easy to build and review page states without\n        needing to navigate to them in your app. Here are some handy patterns for managing page data\n        in Storybook:\n      </p>\n      <ul>\n        <li>\n          Use a higher-level connected component. Storybook helps you compose such data from the\n          \"args\" of child component stories\n        </li>\n        <li>\n          Assemble data in the page component from your services. You can mock these services out\n          using Storybook.\n        </li>\n      </ul>\n      <p>\n        Get a guided tutorial on component-driven development at\n        <a href=\"https://www.learnstorybook.com\" target=\"_blank\" rel=\"noopener noreferrer\">\n          Learn Storybook\n        </a>\n        . Read more in the\n        <a href=\"https://storybook.js.org/docs\" target=\"_blank\" rel=\"noopener noreferrer\">\n          docs\n        </a>\n        .\n      </p>\n      <div class=\"tip-wrapper\">\n        <span class=\"tip\">Tip</span> Adjust the width of the canvas with the\n        <svg width=\"10\" height=\"10\" viewBox=\"0 0 12 12\" xmlns=\"http://www.w3.org/2000/svg\">\n          <g fill=\"none\" fillRule=\"evenodd\">\n            <path\n              d=\"M1.5 5.2h4.8c.3 0 .5.2.5.4v5.1c-.1.2-.3.3-.4.3H1.4a.5.5 0 01-.5-.4V5.7c0-.3.2-.5.5-.5zm0-2.1h6.9c.3 0 .5.2.5.4v7a.5.5 0 01-1 0V4H1.5a.5.5 0 010-1zm0-2.1h9c.3 0 .5.2.5.4v9.1a.5.5 0 01-1 0V2H1.5a.5.5 0 010-1zm4.3 5.2H2V10h3.8V6.2z\"\n              id=\"a\"\n              fill=\"#999\"\n            />\n          </g>\n        </svg>\n        Viewports addon in the toolbar\n      </div>\n    </section>\n  </article>`,\n  styleUrls: ['./page.css'],\n})\nexport default class PageComponent {\n  @Input()\n  user: unknown = null;\n\n  @Output()\n  onLogin = new EventEmitter<Event>();\n\n  @Output()\n  onLogout = new EventEmitter<Event>();\n\n  @Output()\n  onCreateAccount = new EventEmitter<Event>();\n}\n\n// export const Page = ({ user, onLogin, onLogout, onCreateAccount }) => (\n//   <article>\n//     <Header user={user} onLogin={onLogin} onLogout={onLogout} onCreateAccount={onCreateAccount} />\n\n// );\n// Page.propTypes = {\n//   user: PropTypes.shape({}),\n//   onLogin: PropTypes.func.isRequired,\n//   onLogout: PropTypes.func.isRequired,\n//   onCreateAccount: PropTypes.func.isRequired,\n// };\n\n// Page.defaultProps = {\n//   user: null,\n// };\n",
+            "assetsDirs": [],
+            "styleUrlsData": [
+                {
+                    "data": "section {\n  font-family: 'Nunito Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;\n  font-size: 14px;\n  line-height: 24px;\n  padding: 48px 20px;\n  margin: 0 auto;\n  max-width: 600px;\n  color: #333;\n}\n\nh2 {\n  font-weight: 900;\n  font-size: 32px;\n  line-height: 1;\n  margin: 0 0 4px;\n  display: inline-block;\n  vertical-align: top;\n}\n\np {\n  margin: 1em 0;\n}\n\na {\n  text-decoration: none;\n  color: #1ea7fd;\n}\n\nul {\n  padding-left: 30px;\n  margin: 1em 0;\n}\n\nli {\n  margin-bottom: 8px;\n}\n\n.tip {\n  display: inline-block;\n  border-radius: 1em;\n  font-size: 11px;\n  line-height: 12px;\n  font-weight: 700;\n  background: #e7fdd8;\n  color: #66bf3c;\n  padding: 4px 12px;\n  margin-right: 10px;\n  vertical-align: top;\n}\n\n.tip-wrapper {\n  font-size: 13px;\n  line-height: 20px;\n  margin-top: 40px;\n  margin-bottom: 40px;\n}\n\n.tip-wrapper svg {\n  display: inline-block;\n  height: 12px;\n  width: 12px;\n  margin-right: 4px;\n  vertical-align: top;\n  margin-top: 3px;\n}\n\n.tip-wrapper svg path {\n  fill: #1ea7fd;\n}\n",
+                    "styleUrl": "./page.css"
+                }
+            ],
+            "stylesData": ""
+        },
+        {
+            "name": "SignupComponent",
+            "id": "component-SignupComponent-e2198179f0fc25570109f03329b18008",
+            "file": "src/app/user/signup.component.ts",
+            "encapsulation": [],
+            "entryComponents": [],
+            "inputs": [],
+            "outputs": [],
+            "providers": [],
+            "selector": "app-signup",
+            "styleUrls": [
+                "./signup.component.scss"
+            ],
+            "styles": [],
+            "templateUrl": [
+                "./signup.component.html"
+            ],
+            "viewProviders": [],
+            "inputsClass": [],
+            "outputsClass": [],
+            "propertiesClass": [
+                {
+                    "name": "componentActive",
+                    "defaultValue": "true",
+                    "type": "",
+                    "optional": false,
+                    "description": "",
+                    "line": 20
+                },
+                {
+                    "name": "isLoggedIn",
+                    "defaultValue": "false",
+                    "type": "",
+                    "optional": false,
+                    "description": "",
+                    "line": 18
+                },
+                {
+                    "name": "loggedinUser",
+                    "type": "User",
+                    "optional": false,
+                    "description": "",
+                    "line": 19
+                },
+                {
+                    "name": "userForm",
+                    "type": "FormGroup",
+                    "optional": false,
+                    "description": "",
+                    "line": 17
+                }
+            ],
+            "methodsClass": [
+                {
+                    "name": "handleLogin",
+                    "args": [
+                        {
+                            "name": "value",
+                            "type": "boolean"
+                        }
+                    ],
+                    "optional": false,
+                    "returnType": "void",
+                    "typeParameters": [],
+                    "line": 45,
+                    "jsdoctags": [
+                        {
+                            "name": "value",
+                            "type": "boolean",
+                            "tagName": {
+                                "text": "param"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "ngOnDestroy",
+                    "args": [],
+                    "optional": false,
+                    "returnType": "void",
+                    "typeParameters": [],
+                    "line": 63
+                },
+                {
+                    "name": "ngOnInit",
+                    "args": [],
+                    "optional": false,
+                    "returnType": "void",
+                    "typeParameters": [],
+                    "line": 29
+                },
+                {
+                    "name": "save",
+                    "args": [],
+                    "optional": false,
+                    "returnType": "void",
+                    "typeParameters": [],
+                    "line": 49
+                }
+            ],
+            "hostBindings": [],
+            "hostListeners": [],
+            "description": "",
+            "rawdescription": "",
+            "type": "component",
+            "sourceCode": "import {Component, OnDestroy, OnInit} from '@angular/core';\nimport {FormArray, FormBuilder, FormGroup} from '@angular/forms';\nimport {UserService} from '../service/user.service';\nimport {User} from '../model/user';\nimport {select, Store} from '@ngrx/store';\nimport {takeWhile} from 'rxjs/operators';\nimport {Login} from './state/user.actions';\nimport {getIsLoggedIn} from './state/user.reducer';\n\n@Component({\n  selector: 'app-signup',\n  templateUrl: './signup.component.html',\n  styleUrls: ['./signup.component.scss']\n})\nexport class SignupComponent implements OnInit, OnDestroy {\n\n  userForm: FormGroup;\n  isLoggedIn = false;\n  loggedinUser: User;\n  componentActive = true;\n\n  constructor(private fb: FormBuilder, private userService: UserService, private store: Store<any>) {\n  }\n\n  get users() {\n    return this.userForm.get('users') as FormArray;\n  }\n\n  ngOnInit() {\n    this.userForm = this.fb.group({\n      username: '',\n      password: '',\n      firstName: '',\n      lastName: '',\n      email: ''\n    });\n\n    this.store.pipe(select(getIsLoggedIn),\n      takeWhile(() => this.componentActive))\n      .subscribe(\n        loggedIn => this.isLoggedIn = loggedIn\n      );\n  }\n\n  handleLogin(value: boolean): void {\n    this.store.dispatch(new Login(value));\n  }\n\n  save() {\n    const user = new User();\n    user.username = this.userForm.get('username').value;\n    user.password = this.userForm.get('password').value;\n    user.firstName = this.userForm.get('firstName').value;\n    user.lastName = this.userForm.get('lastName').value;\n    user.email = this.userForm.get('email').value;\n    this.userService.setUsers(user);\n\n    // this.isLoggedIn = true;\n    this.handleLogin(true);\n    this.loggedinUser = user;\n  }\n\n  ngOnDestroy(): void {\n    this.componentActive = false;\n  }\n}\n",
+            "assetsDirs": [],
+            "styleUrlsData": [
+                {
+                    "data": "",
+                    "styleUrl": "./signup.component.scss"
+                }
+            ],
+            "stylesData": "",
+            "constructorObj": {
+                "name": "constructor",
+                "description": "",
+                "args": [
+                    {
+                        "name": "fb",
+                        "type": "FormBuilder"
+                    },
+                    {
+                        "name": "userService",
+                        "type": "UserService"
+                    },
+                    {
+                        "name": "store",
+                        "type": "Store<any>"
+                    }
+                ],
+                "line": 20,
+                "jsdoctags": [
+                    {
+                        "name": "fb",
+                        "type": "FormBuilder",
+                        "tagName": {
+                            "text": "param"
+                        }
+                    },
+                    {
+                        "name": "userService",
+                        "type": "UserService",
+                        "tagName": {
+                            "text": "param"
+                        }
+                    },
+                    {
+                        "name": "store",
+                        "type": "Store<any>",
+                        "tagName": {
+                            "text": "param"
+                        }
+                    }
+                ]
+            },
+            "implements": [
+                "OnInit",
+                "OnDestroy"
+            ],
+            "accessors": {
+                "users": {
+                    "name": "users",
+                    "getSignature": {
+                        "name": "users",
+                        "type": "",
+                        "returnType": "",
+                        "line": 25
+                    }
+                }
+            },
+            "templateData": "<div class=\"container\">\n  <div *ngIf=!isLoggedIn>\n    <h3>Sign up to register your contact lense</h3>\n    <form (ngSubmit)=\"save()\" [formGroup]=\"userForm\">\n      <div class=\"form-group row\">\n        <div class=\"col-sm-2\">\n          <label for=\"username\" class=\"col-form-label pl-0\">Username</label>\n        </div>\n        <div class=\"col-sm-4\">\n          <input id=\"username\" type=\"text\" class=\"form-control field\" formControlName=\"username\">\n        </div>\n      </div>\n\n      <div class=\"form-group row\">\n        <div class=\"col-sm-2\">\n          <label for=\"password\" class=\"col-form-label pl-0\">Password</label>\n        </div>\n        <div class=\"col-sm-4\">\n          <input id=\"password\" type=\"password\" class=\"form-control\" formControlName=\"password\">\n        </div>\n      </div>\n\n      <div class=\"form-group row\">\n        <div class=\"col-sm-2\">\n          <label for=\"firstName\" class=\"col-form-label pl-0\">First Name</label>\n        </div>\n        <div class=\"col-sm-4\">\n          <input id=\"firstName\" type=\"text\" class=\"form-control\" formControlName=\"firstName\">\n        </div>\n      </div>\n\n      <div class=\"form-group row\">\n        <div class=\"col-sm-2\">\n          <label for=\"lastName\" class=\"col-form-label pl-0\">Last Name</label>\n        </div>\n        <div class=\"col-sm-4\">\n          <input id=\"lastName\" type=\"text\" class=\"form-control\" formControlName=\"lastName\">\n        </div>\n      </div>\n\n      <div class=\"form-group row\">\n        <div class=\"col-sm-2\">\n          <label for=\"email\" class=\"col-form-label pl-0\">Email</label>\n        </div>\n        <div class=\"col-sm-4\">\n          <input id=\"email\" type=\"email\" class=\"form-control\" placeholder=\"name@example.com\" formControlName=\"email\">\n        </div>\n      </div>\n\n      <button type=\"submit\" class=\"btn btn-primary\">Save</button>\n      <button type=\"button\" class=\"btn btn-secondary\">Cancel</button>\n    </form>\n  </div>\n\n  <div *ngIf = isLoggedIn>\n    Welcome! {{loggedinUser.firstName}}\n  </div>\n</div>\n"
+        }
+    ],
+    "modules": [
+        {
+            "name": "AppModule",
+            "children": [
+                {
+                    "type": "providers",
+                    "elements": [
+                        {
+                            "name": "ContactService"
+                        }
+                    ]
+                },
+                {
+                    "type": "declarations",
+                    "elements": [
+                        {
+                            "name": "AppComponent"
+                        },
+                        {
+                            "name": "ContactEditComponent"
+                        },
+                        {
+                            "name": "ContactsComponent"
+                        },
+                        {
+                            "name": "HomeComponent"
+                        },
+                        {
+                            "name": "SignupComponent"
+                        }
+                    ]
+                },
+                {
+                    "type": "imports",
+                    "elements": [
+                        {
+                            "name": "AppRoutingModule"
+                        },
+                        {
+                            "name": "DemoMaterialModule"
+                        }
+                    ]
+                },
+                {
+                    "type": "exports",
+                    "elements": []
+                },
+                {
+                    "type": "bootstrap",
+                    "elements": [
+                        {
+                            "name": "AppComponent"
+                        }
+                    ]
+                },
+                {
+                    "type": "classes",
+                    "elements": []
+                }
+            ]
+        },
+        {
+            "name": "AppRoutingModule",
+            "children": [
+                {
+                    "type": "providers",
+                    "elements": []
+                },
+                {
+                    "type": "declarations",
+                    "elements": []
+                },
+                {
+                    "type": "imports",
+                    "elements": []
+                },
+                {
+                    "type": "exports",
+                    "elements": []
+                },
+                {
+                    "type": "bootstrap",
+                    "elements": []
+                },
+                {
+                    "type": "classes",
+                    "elements": []
+                }
+            ]
+        },
+        {
+            "name": "DemoMaterialModule",
+            "children": [
+                {
+                    "type": "providers",
+                    "elements": []
+                },
+                {
+                    "type": "declarations",
+                    "elements": []
+                },
+                {
+                    "type": "imports",
+                    "elements": []
+                },
+                {
+                    "type": "exports",
+                    "elements": []
+                },
+                {
+                    "type": "bootstrap",
+                    "elements": []
+                },
+                {
+                    "type": "classes",
+                    "elements": []
+                }
+            ]
+        },
+        {
+            "name": "UserModule",
+            "children": [
+                {
+                    "type": "providers",
+                    "elements": []
+                },
+                {
+                    "type": "declarations",
+                    "elements": [
+                        {
+                            "name": "SignupComponent"
+                        }
+                    ]
+                },
+                {
+                    "type": "imports",
+                    "elements": []
+                },
+                {
+                    "type": "exports",
+                    "elements": []
+                },
+                {
+                    "type": "bootstrap",
+                    "elements": []
+                },
+                {
+                    "type": "classes",
+                    "elements": []
+                }
+            ]
+        }
+    ],
+    "miscellaneous": {
+        "variables": [
+            {
+                "name": "context",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "src/test.ts",
+                "type": "",
+                "defaultValue": "require.context('./', true, /\\.spec\\.ts$/)"
+            },
+            {
+                "name": "environment",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "src/environments/environment.prod.ts",
+                "type": "object",
+                "defaultValue": "{\n  production: true\n}"
+            },
+            {
+                "name": "environment",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "src/environments/environment.ts",
+                "type": "object",
+                "defaultValue": "{\n  production: false\n}"
+            },
+            {
+                "name": "getIsLoggedIn",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "src/app/user/state/user.reducer.ts",
+                "type": "",
+                "defaultValue": "createSelector(\n  getUserFeatureState,\n  state => state.loggedIn\n)"
+            },
+            {
+                "name": "getUserFeatureState",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "src/app/user/state/user.reducer.ts",
+                "type": "",
+                "defaultValue": "createFeatureSelector<UserState>('users')"
+            },
+            {
+                "name": "initialState",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "src/app/user/state/user.reducer.ts",
+                "type": "UserState",
+                "defaultValue": "{\n  loggedIn: false\n}"
+            },
+            {
+                "name": "Large",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "src/stories/Button.stories.ts",
+                "type": "",
+                "defaultValue": "Template.bind({})"
+            },
+            {
+                "name": "LoggedIn",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "src/stories/Page.stories.ts",
+                "type": "",
+                "defaultValue": "Template.bind({})"
+            },
+            {
+                "name": "LoggedIn",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "src/stories/Header.stories.ts",
+                "type": "",
+                "defaultValue": "Template.bind({})"
+            },
+            {
+                "name": "LoggedOut",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "src/stories/Page.stories.ts",
+                "type": "",
+                "defaultValue": "Template.bind({})"
+            },
+            {
+                "name": "LoggedOut",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "src/stories/Header.stories.ts",
+                "type": "",
+                "defaultValue": "Template.bind({})"
+            },
+            {
+                "name": "Primary",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "src/stories/Button.stories.ts",
+                "type": "",
+                "defaultValue": "Template.bind({})"
+            },
+            {
+                "name": "require",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "src/test.ts",
+                "type": "any"
+            },
+            {
+                "name": "Secondary",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "src/stories/Button.stories.ts",
+                "type": "",
+                "defaultValue": "Template.bind({})"
+            },
+            {
+                "name": "SignUp",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "src/stories/Signup.stories.ts",
+                "type": "",
+                "defaultValue": "Template.bind({})"
+            },
+            {
+                "name": "Small",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "src/stories/Button.stories.ts",
+                "type": "",
+                "defaultValue": "Template.bind({})"
+            },
+            {
+                "name": "Template",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "src/stories/Signup.stories.ts",
+                "type": "Story<SignupComponent>",
+                "defaultValue": "() => ({\n  component: SignupComponent,\n  template: `<app-signup></app-signup>`,\n})"
+            },
+            {
+                "name": "Template",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "src/stories/Page.stories.ts",
+                "type": "Story<Page>",
+                "defaultValue": "(args: Page) => ({\n  component: Page,\n  props: args,\n})"
+            },
+            {
+                "name": "Template",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "src/stories/Button.stories.ts",
+                "type": "Story<Button>",
+                "defaultValue": "(args: Button) => ({\n  component: Button,\n  props: args,\n})"
+            },
+            {
+                "name": "Template",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "src/stories/Header.stories.ts",
+                "type": "Story<Header>",
+                "defaultValue": "(args: Header) => ({\n  component: Header,\n  props: args,\n})"
+            }
+        ],
+        "functions": [
+            {
+                "name": "reducer",
+                "file": "src/app/user/state/user.reducer.ts",
+                "ctype": "miscellaneous",
+                "subtype": "function",
+                "description": "",
+                "args": [
+                    {
+                        "name": "state",
+                        "type": ""
+                    },
+                    {
+                        "name": "action",
+                        "type": ""
+                    }
+                ],
+                "returnType": "UserState",
+                "jsdoctags": [
+                    {
+                        "name": "state",
+                        "type": "",
+                        "tagName": {
+                            "text": "param"
+                        }
+                    },
+                    {
+                        "name": "action",
+                        "type": "",
+                        "tagName": {
+                            "text": "param"
+                        }
+                    }
+                ]
+            }
+        ],
+        "typealiases": [
+            {
+                "name": "UserActions",
+                "ctype": "miscellaneous",
+                "subtype": "typealias",
+                "rawtype": "Login",
+                "file": "src/app/user/state/user.actions.ts",
+                "description": "",
+                "kind": 161
+            }
+        ],
+        "enumerations": [
+            {
+                "name": "UserActionTypes",
+                "childs": [
+                    {
+                        "name": "login",
+                        "value": "[User] Log In"
+                    }
+                ],
+                "ctype": "miscellaneous",
+                "subtype": "enum",
+                "description": "",
+                "file": "src/app/user/state/user.actions.ts"
+            }
+        ],
+        "groupedVariables": {
+            "src/test.ts": [
+                {
+                    "name": "context",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "src/test.ts",
+                    "type": "",
+                    "defaultValue": "require.context('./', true, /\\.spec\\.ts$/)"
+                },
+                {
+                    "name": "require",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "src/test.ts",
+                    "type": "any"
+                }
+            ],
+            "src/environments/environment.prod.ts": [
+                {
+                    "name": "environment",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "src/environments/environment.prod.ts",
+                    "type": "object",
+                    "defaultValue": "{\n  production: true\n}"
+                }
+            ],
+            "src/environments/environment.ts": [
+                {
+                    "name": "environment",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "src/environments/environment.ts",
+                    "type": "object",
+                    "defaultValue": "{\n  production: false\n}"
+                }
+            ],
+            "src/app/user/state/user.reducer.ts": [
+                {
+                    "name": "getIsLoggedIn",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "src/app/user/state/user.reducer.ts",
+                    "type": "",
+                    "defaultValue": "createSelector(\n  getUserFeatureState,\n  state => state.loggedIn\n)"
+                },
+                {
+                    "name": "getUserFeatureState",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "src/app/user/state/user.reducer.ts",
+                    "type": "",
+                    "defaultValue": "createFeatureSelector<UserState>('users')"
+                },
+                {
+                    "name": "initialState",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "src/app/user/state/user.reducer.ts",
+                    "type": "UserState",
+                    "defaultValue": "{\n  loggedIn: false\n}"
+                }
+            ],
+            "src/stories/Button.stories.ts": [
+                {
+                    "name": "Large",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "src/stories/Button.stories.ts",
+                    "type": "",
+                    "defaultValue": "Template.bind({})"
+                },
+                {
+                    "name": "Primary",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "src/stories/Button.stories.ts",
+                    "type": "",
+                    "defaultValue": "Template.bind({})"
+                },
+                {
+                    "name": "Secondary",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "src/stories/Button.stories.ts",
+                    "type": "",
+                    "defaultValue": "Template.bind({})"
+                },
+                {
+                    "name": "Small",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "src/stories/Button.stories.ts",
+                    "type": "",
+                    "defaultValue": "Template.bind({})"
+                },
+                {
+                    "name": "Template",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "src/stories/Button.stories.ts",
+                    "type": "Story<Button>",
+                    "defaultValue": "(args: Button) => ({\n  component: Button,\n  props: args,\n})"
+                }
+            ],
+            "src/stories/Page.stories.ts": [
+                {
+                    "name": "LoggedIn",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "src/stories/Page.stories.ts",
+                    "type": "",
+                    "defaultValue": "Template.bind({})"
+                },
+                {
+                    "name": "LoggedOut",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "src/stories/Page.stories.ts",
+                    "type": "",
+                    "defaultValue": "Template.bind({})"
+                },
+                {
+                    "name": "Template",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "src/stories/Page.stories.ts",
+                    "type": "Story<Page>",
+                    "defaultValue": "(args: Page) => ({\n  component: Page,\n  props: args,\n})"
+                }
+            ],
+            "src/stories/Header.stories.ts": [
+                {
+                    "name": "LoggedIn",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "src/stories/Header.stories.ts",
+                    "type": "",
+                    "defaultValue": "Template.bind({})"
+                },
+                {
+                    "name": "LoggedOut",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "src/stories/Header.stories.ts",
+                    "type": "",
+                    "defaultValue": "Template.bind({})"
+                },
+                {
+                    "name": "Template",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "src/stories/Header.stories.ts",
+                    "type": "Story<Header>",
+                    "defaultValue": "(args: Header) => ({\n  component: Header,\n  props: args,\n})"
+                }
+            ],
+            "src/stories/Signup.stories.ts": [
+                {
+                    "name": "SignUp",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "src/stories/Signup.stories.ts",
+                    "type": "",
+                    "defaultValue": "Template.bind({})"
+                },
+                {
+                    "name": "Template",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "src/stories/Signup.stories.ts",
+                    "type": "Story<SignupComponent>",
+                    "defaultValue": "() => ({\n  component: SignupComponent,\n  template: `<app-signup></app-signup>`,\n})"
+                }
+            ]
+        },
+        "groupedFunctions": {
+            "src/app/user/state/user.reducer.ts": [
+                {
+                    "name": "reducer",
+                    "file": "src/app/user/state/user.reducer.ts",
+                    "ctype": "miscellaneous",
+                    "subtype": "function",
+                    "description": "",
+                    "args": [
+                        {
+                            "name": "state",
+                            "type": ""
+                        },
+                        {
+                            "name": "action",
+                            "type": ""
+                        }
+                    ],
+                    "returnType": "UserState",
+                    "jsdoctags": [
+                        {
+                            "name": "state",
+                            "type": "",
+                            "tagName": {
+                                "text": "param"
+                            }
+                        },
+                        {
+                            "name": "action",
+                            "type": "",
+                            "tagName": {
+                                "text": "param"
+                            }
+                        }
+                    ]
+                }
+            ]
+        },
+        "groupedEnumerations": {
+            "src/app/user/state/user.actions.ts": [
+                {
+                    "name": "UserActionTypes",
+                    "childs": [
+                        {
+                            "name": "login",
+                            "value": "[User] Log In"
+                        }
+                    ],
+                    "ctype": "miscellaneous",
+                    "subtype": "enum",
+                    "description": "",
+                    "file": "src/app/user/state/user.actions.ts"
+                }
+            ]
+        },
+        "groupedTypeAliases": {
+            "src/app/user/state/user.actions.ts": [
+                {
+                    "name": "UserActions",
+                    "ctype": "miscellaneous",
+                    "subtype": "typealias",
+                    "rawtype": "Login",
+                    "file": "src/app/user/state/user.actions.ts",
+                    "description": "",
+                    "kind": 161
+                }
+            ]
+        }
+    },
+    "routes": {
+        "name": "<root>",
+        "kind": "module",
+        "className": "AppModule",
+        "children": [
+            {
+                "name": "routes",
+                "filename": "src/app/app-routing.module.ts",
+                "module": "AppRoutingModule",
+                "children": [
+                    {
+                        "path": "",
+                        "component": "HomeComponent"
+                    },
+                    {
+                        "path": "contacts",
+                        "component": "ContactsComponent"
+                    },
+                    {
+                        "path": "edit",
+                        "component": "ContactEditComponent"
+                    }
+                ],
+                "kind": "module"
+            }
+        ]
+    },
+    "coverage": {
+        "count": 2,
+        "status": "low",
+        "files": [
+            {
+                "filePath": "e2e/src/app.po.ts",
+                "type": "class",
+                "linktype": "classe",
+                "name": "AppPage",
+                "coveragePercent": 0,
+                "coverageCount": "0/3",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/app.component.ts",
+                "type": "component",
+                "linktype": "component",
+                "name": "AppComponent",
+                "coveragePercent": 0,
+                "coverageCount": "0/2",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/contacts/contact-edit.component.ts",
+                "type": "component",
+                "linktype": "component",
+                "name": "ContactEditComponent",
+                "coveragePercent": 0,
+                "coverageCount": "0/5",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/contacts/contacts.component.ts",
+                "type": "component",
+                "linktype": "component",
+                "name": "ContactsComponent",
+                "coveragePercent": 0,
+                "coverageCount": "0/5",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/home/home.component.ts",
+                "type": "component",
+                "linktype": "component",
+                "name": "HomeComponent",
+                "coveragePercent": 0,
+                "coverageCount": "0/10",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/model/contact.ts",
+                "type": "class",
+                "linktype": "classe",
+                "name": "Contact",
+                "coveragePercent": 0,
+                "coverageCount": "0/9",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/model/user.ts",
+                "type": "class",
+                "linktype": "classe",
+                "name": "User",
+                "coveragePercent": 0,
+                "coverageCount": "0/7",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/service/cat-service.service.ts",
+                "type": "injectable",
+                "linktype": "injectable",
+                "name": "CatServiceService",
+                "coveragePercent": 0,
+                "coverageCount": "0/4",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/service/contact.service.ts",
+                "type": "injectable",
+                "linktype": "injectable",
+                "name": "ContactService",
+                "coveragePercent": 0,
+                "coverageCount": "0/8",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/service/user.service.ts",
+                "type": "injectable",
+                "linktype": "injectable",
+                "name": "UserService",
+                "coveragePercent": 0,
+                "coverageCount": "0/6",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/user/signup.component.ts",
+                "type": "component",
+                "linktype": "component",
+                "name": "SignupComponent",
+                "coveragePercent": 0,
+                "coverageCount": "0/10",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/user/state/user.actions.ts",
+                "type": "class",
+                "linktype": "classe",
+                "name": "Login",
+                "coveragePercent": 0,
+                "coverageCount": "0/4",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/user/state/user.reducer.ts",
+                "type": "interface",
+                "linktype": "interface",
+                "name": "UserState",
+                "coveragePercent": 0,
+                "coverageCount": "0/2",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/user/state/user.reducer.ts",
+                "type": "function",
+                "linksubtype": "function",
+                "name": "reducer",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/user/state/user.reducer.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "name": "getIsLoggedIn",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/user/state/user.reducer.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "name": "getUserFeatureState",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/user/state/user.reducer.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "name": "initialState",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "src/environments/environment.prod.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "name": "environment",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "src/environments/environment.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "name": "environment",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "src/stories/Button.stories.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "name": "Large",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "src/stories/Button.stories.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "name": "Primary",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "src/stories/Button.stories.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "name": "Secondary",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "src/stories/Button.stories.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "name": "Small",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "src/stories/Button.stories.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "name": "Template",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "src/stories/Header.stories.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "name": "LoggedIn",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "src/stories/Header.stories.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "name": "LoggedOut",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "src/stories/Header.stories.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "name": "Template",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "src/stories/Page.stories.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "name": "LoggedIn",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "src/stories/Page.stories.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "name": "LoggedOut",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "src/stories/Page.stories.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "name": "Template",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "src/stories/Signup.stories.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "name": "SignUp",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "src/stories/Signup.stories.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "name": "Template",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "src/stories/button.component.ts",
+                "type": "component",
+                "linktype": "component",
+                "name": "ButtonComponent",
+                "coveragePercent": 83,
+                "coverageCount": "5/6",
+                "status": "very-good"
+            },
+            {
+                "filePath": "src/stories/header.component.ts",
+                "type": "component",
+                "linktype": "component",
+                "name": "HeaderComponent",
+                "coveragePercent": 0,
+                "coverageCount": "0/5",
+                "status": "low"
+            },
+            {
+                "filePath": "src/stories/page.component.ts",
+                "type": "component",
+                "linktype": "component",
+                "name": "PageComponent",
+                "coveragePercent": 0,
+                "coverageCount": "0/5",
+                "status": "low"
+            },
+            {
+                "filePath": "src/test.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "name": "context",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "src/test.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "name": "require",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            }
+        ]
+    }
+}
