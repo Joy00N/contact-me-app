@@ -11,7 +11,6 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {DemoMaterialModule} from './shared/material-module';
 import {ReactiveFormsModule} from '@angular/forms';
 import {ContactService} from './service/contact.service';
-import {SignupComponent} from './user/signup.component';
 import {StoreModule} from '@ngrx/store';
 import {StoreDevtoolsModule} from '@ngrx/store-devtools';
 
@@ -21,7 +20,6 @@ import {StoreDevtoolsModule} from '@ngrx/store-devtools';
     HomeComponent,
     ContactsComponent,
     ContactEditComponent,
-    SignupComponent
   ],
   imports: [
     ReactiveFormsModule,
