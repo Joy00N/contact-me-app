@@ -3,9 +3,8 @@ import {FormArray, FormBuilder, FormGroup} from '@angular/forms';
 import {UserService} from '../service/user.service';
 import {User} from '../model/user';
 import {select, Store} from '@ngrx/store';
-import {takeWhile} from 'rxjs/operators';
-import {Login} from './state/user.actions';
-import {getIsLoggedIn} from './state/user.reducer';
+import {login} from './state/user.actions';
+import {getIsLoggedIn} from './state/user.selector';
 
 @Component({
   selector: 'app-signup',
@@ -35,15 +34,14 @@ export class SignupComponent implements OnInit, OnDestroy {
       email: ''
     });
 
-    this.store.pipe(select(getIsLoggedIn),
-      takeWhile(() => this.componentActive))
+    this.store.pipe(select(getIsLoggedIn))
       .subscribe(
         loggedIn => this.isLoggedIn = loggedIn
       );
   }
 
   handleLogin(value: boolean): void {
-    this.store.dispatch(new Login(value));
+    this.store.dispatch(login());
   }
 
   save() {

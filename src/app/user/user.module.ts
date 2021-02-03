@@ -1,21 +1,19 @@
 import {NgModule} from '@angular/core';
-import {RouterModule, Routes} from '@angular/router';
 import {StoreModule} from '@ngrx/store';
-import {reducer} from './state/user.reducer';
-import {SignupComponent} from './signup.component';
+import {userReducer} from './state/user.reducer';
 
 
-const userRoutes: Routes = [
-  {path: 'login', component: SignupComponent}
-];
+// const userRoutes: Routes = [
+//   {path: 'login', component: SignupComponent}
+// ];
 
 @NgModule({
   imports: [
-    RouterModule.forChild(userRoutes),
-    StoreModule.forFeature('users', reducer)
+    // RouterModule.forChild(userRoutes),
+    StoreModule.forFeature('users', userReducer)
   ],
   declarations: [
-    SignupComponent
+    // SignupComponent
   ]
 })
 export class UserModule {

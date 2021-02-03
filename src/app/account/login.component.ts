@@ -3,6 +3,8 @@ import {FormBuilder, FormGroup} from '@angular/forms';
 import {ActivatedRoute, Router} from '@angular/router';
 import {AccountService} from '../service/account.service';
 import {take} from 'rxjs/operators';
+import {Store} from '@ngrx/store';
+import {login} from '../user/state/user.actions';
 
 @Component({
   selector: 'app-login',
@@ -15,7 +17,7 @@ export class LoginComponent implements OnInit {
   returnUrl: string;
 
 
-  constructor(private fb: FormBuilder, private route: ActivatedRoute, private router: Router, private accountService: AccountService
+  constructor(private store: Store<any>, private fb: FormBuilder, private route: ActivatedRoute, private router: Router, private accountService: AccountService
   ) {
   }
 
@@ -38,7 +40,14 @@ export class LoginComponent implements OnInit {
       .pipe(take(1))
       .subscribe(
         data => {
-          this.router.navigate([this.returnUrl]);
+          if (data === true) {
+            this.store.dispatch(login());
+            this.router.navigate(['']);
+            // this.router.navigate(['']);
+            // this.router.navigate([this.returnUrl]);
+          } else {
+            console.log('wrong credentials!');
+          }
         },
         error => {
           console.log(error);

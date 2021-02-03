@@ -1,29 +1,31 @@
-import {UserActionTypes} from './user.actions';
-import {createFeatureSelector, createSelector} from '@ngrx/store';
+import {createReducer, on} from '@ngrx/store';
+import {login, logout} from './user.actions';
+import {User} from '../../model/user';
 
 export interface UserState {
+  currentUser: User;
   loggedIn: boolean;
 }
 
 const initialState: UserState = {
+  currentUser: null,
   loggedIn: false
 };
 
-const getUserFeatureState = createFeatureSelector<UserState>('users');
-
-export const getIsLoggedIn = createSelector(
-  getUserFeatureState,
-  state => state.loggedIn
+export const userReducer = createReducer<UserState>(
+  initialState,
+  on(login, (state): UserState => {
+    console.log('login state: ' + JSON.stringify(state));
+    return {
+      ...state,
+      loggedIn: true
+    };
+  }),
+  on(logout, (state): UserState => {
+    console.log('logout state: ' + JSON.stringify(state));
+    return {
+      ...state,
+      loggedIn: false
+    };
+  })
 );
-
-export function reducer(state = initialState, action): UserState {
-  switch (action.type) {
-    case UserActionTypes.login:
-      return {
-        ...state,
-        loggedIn: action.payload
-      };
-    default:
-      return state;
-  }
-}

@@ -13,6 +13,8 @@ import {ReactiveFormsModule} from '@angular/forms';
 import {ContactService} from './service/contact.service';
 import {StoreModule} from '@ngrx/store';
 import {StoreDevtoolsModule} from '@ngrx/store-devtools';
+import {UserModule} from './user/user.module';
+import {AccountModule} from './account/account.module';
 
 @NgModule({
   declarations: [
@@ -26,6 +28,8 @@ import {StoreDevtoolsModule} from '@ngrx/store-devtools';
     BrowserModule,
     HttpClientModule,
     AppRoutingModule,
+    UserModule,
+    AccountModule,
     BrowserAnimationsModule,
     DemoMaterialModule,
     StoreModule.forRoot({}),

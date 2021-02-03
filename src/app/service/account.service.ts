@@ -4,19 +4,20 @@ import {User} from '../model/user';
 import {Router} from '@angular/router';
 import {HttpClient} from '@angular/common/http';
 import {environment} from '../../environments/environment';
-import {map} from 'rxjs/operators';
+import {logout} from '../user/state/user.actions';
+import {Store} from '@ngrx/store';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AccountService {
   private userSubject: BehaviorSubject<User>;
-  private authenticateUrl = `${environment.apiUrl}/users/authenticate`;
-  private registerUrl = `${environment.apiUrl}/users/register`;
+  private authenticateUrl = `${environment.apiUrl}/api/users/authenticate`;
+  private registerUrl = `${environment.apiUrl}/api/users/register`;
 
   public user: Observable<User>;
 
-  constructor(private router: Router, private http: HttpClient) {
+  constructor(private router: Router, private http: HttpClient, private store: Store<any>) {
     this.userSubject = new BehaviorSubject<User>(JSON.parse(localStorage.getItem('user')));
     this.user = this.userSubject.asObservable();
   }
@@ -25,18 +26,16 @@ export class AccountService {
     return this.userSubject.value;
   }
 
-  login(username: string, password: string) {
-    return this.http.post<User>(this.authenticateUrl, {username, password})
-      .pipe(map(user => {
-        localStorage.setItem('user', JSON.stringify(user));
-        this.userSubject.next(user);
-        return user;
-      }));
+  login(username: string, password: string): Observable<boolean> {
+    const userObj = new User();
+    userObj.username = username;
+    userObj.password = password;
+
+    return this.http.post<boolean>(this.authenticateUrl, userObj);
   }
 
   logout() {
-    localStorage.removeItem('user');
-    this.userSubject.next(null);
+    this.store.dispatch(logout());
     this.router.navigate(['/account/login']);
   }
 
