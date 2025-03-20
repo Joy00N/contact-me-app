@@ -3,6 +3,7 @@ import {RouterModule, Routes} from '@angular/router';
 import {HomeComponent} from './home/home.component';
 import {ContactsComponent} from './contacts/contacts.component';
 import {ContactEditComponent} from './contacts/contact-edit.component';
+import {SettingsComponent} from './settings/settings.component';
 import {AuthGuard} from './shared/auth.guard';
 
 const accountModule = () => import('./account/account.module').then(x => x.AccountModule);
@@ -10,8 +11,9 @@ const accountModule = () => import('./account/account.module').then(x => x.Accou
 const routes: Routes = [
   {path: '', component: HomeComponent, canActivate: [AuthGuard]},
   {path: 'account', loadChildren: accountModule},
-  {path: 'contacts', component: ContactsComponent},
-  {path: 'edit', component: ContactEditComponent},
+  {path: 'contacts', component: ContactsComponent, canActivate: [AuthGuard]},
+  {path: 'edit', component: ContactEditComponent, canActivate: [AuthGuard]},
+  {path: 'settings', component: SettingsComponent, canActivate: [AuthGuard]},
   {path: '**', redirectTo: ''}
 ];
 

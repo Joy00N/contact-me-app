@@ -1,0 +1,101 @@
+<div class="container mt-4">
+  <div class="row">
+    <div class="col-12">
+      <h2>Settings</h2>
+
+      <!-- Loading Spinner -->
+      <div *ngIf="loading" class="text-center my-4">
+        <div class="spinner-border text-primary" role="status">
+          <span class="visually-hidden">Loading...</span>
+        </div>
+      </div>
+
+      <!-- Error Message -->
+      <div *ngIf="error" class="alert alert-danger" role="alert">
+        {{ error }}
+      </div>
+
+      <!-- Success Message -->
+      <div *ngIf="successMessage" class="alert alert-success" role="alert">
+        {{ successMessage }}
+      </div>
+
+      <!-- Settings Form -->
+      <form *ngIf="!loading" [formGroup]="settingsForm" (ngSubmit)="onSubmit()" class="mt-4">
+        <div class="card mb-4">
+          <div class="card-header">
+            <h5 class="mb-0">Notification Settings</h5>
+          </div>
+          <div class="card-body">
+            <div class="mb-3">
+              <div class="form-check form-switch">
+                <input class="form-check-input" type="checkbox" id="emailNotifications" formControlName="emailNotifications">
+                <label class="form-check-label" for="emailNotifications">Email Notifications</label>
+              </div>
+            </div>
+            <div class="mb-3">
+              <div class="form-check form-switch">
+                <input class="form-check-input" type="checkbox" id="pushNotifications" formControlName="pushNotifications">
+                <label class="form-check-label" for="pushNotifications">Push Notifications</label>
+              </div>
+            </div>
+            <div class="mb-3">
+              <label for="notificationFrequency" class="form-label">Notification Frequency</label>
+              <select class="form-select" id="notificationFrequency" formControlName="notificationFrequency">
+                <option value="immediate">Immediate</option>
+                <option value="daily">Daily</option>
+                <option value="weekly">Weekly</option>
+                <option value="monthly">Monthly</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <div class="card mb-4">
+          <div class="card-header">
+            <h5 class="mb-0">Display Settings</h5>
+          </div>
+          <div class="card-body">
+            <div class="mb-3">
+              <label for="language" class="form-label">Language</label>
+              <select class="form-select" id="language" formControlName="language">
+                <option value="en">English</option>
+                <option value="es">Spanish</option>
+                <option value="fr">French</option>
+                <option value="de">German</option>
+                <option value="it">Italian</option>
+              </select>
+            </div>
+            <div class="mb-3">
+              <label for="timezone" class="form-label">Timezone</label>
+              <select class="form-select" id="timezone" formControlName="timezone">
+                <option value="UTC">UTC</option>
+                <option value="EST">Eastern Time</option>
+                <option value="CST">Central Time</option>
+                <option value="MST">Mountain Time</option>
+                <option value="PST">Pacific Time</option>
+              </select>
+            </div>
+            <div class="mb-3">
+              <label for="theme" class="form-label">Theme</label>
+              <select class="form-select" id="theme" formControlName="theme">
+                <option value="light">Light</option>
+                <option value="dark">Dark</option>
+                <option value="system">System Default</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <div class="d-flex gap-2">
+          <button type="submit" class="btn btn-primary" [disabled]="!settingsForm.valid || loading">
+            Save Changes
+          </button>
+          <button type="button" class="btn btn-secondary" (click)="resetForm()">
+            Reset
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div> 

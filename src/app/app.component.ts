@@ -12,7 +12,7 @@ import {getIsLoggedIn} from './user/state/user.selector';
 export class AppComponent implements OnInit {
   title = 'contact-me-app';
   user: User;
-  isLoggedIn = false;
+  isLoggedIn = true;
 
   constructor(private accountService: AccountService, private store: Store<any>) {
     this.accountService.user.subscribe(v => this.user = v);

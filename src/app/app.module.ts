@@ -1,20 +1,21 @@
 import {BrowserModule} from '@angular/platform-browser';
 import {CUSTOM_ELEMENTS_SCHEMA, NgModule} from '@angular/core';
+import {HttpClientModule, HTTP_INTERCEPTORS} from '@angular/common/http';
+import {ReactiveFormsModule} from '@angular/forms';
+import {StoreModule} from '@ngrx/store';
+import {EffectsModule} from '@ngrx/effects';
+import {StoreDevtoolsModule} from '@ngrx/store-devtools';
 
 import {AppRoutingModule} from './app-routing.module';
 import {AppComponent} from './app.component';
 import {HomeComponent} from './home/home.component';
 import {ContactsComponent} from './contacts/contacts.component';
-import {HttpClientModule} from '@angular/common/http';
 import {ContactEditComponent} from './contacts/contact-edit.component';
-import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
-import {DemoMaterialModule} from './shared/material-module';
-import {ReactiveFormsModule} from '@angular/forms';
-import {ContactService} from './service/contact.service';
-import {StoreModule} from '@ngrx/store';
-import {StoreDevtoolsModule} from '@ngrx/store-devtools';
-import {UserModule} from './user/user.module';
-import {AccountModule} from './account/account.module';
+import {SettingsComponent} from './settings/settings.component';
+import {NotificationService} from './service/notification.service';
+import {AuthInterceptor} from './shared/auth.interceptor';
+import {userReducer} from './user/state/user.reducer';
+import {UserEffects} from './user/state/user.effects';
 
 @NgModule({
   declarations: [
@@ -22,23 +23,24 @@ import {AccountModule} from './account/account.module';
     HomeComponent,
     ContactsComponent,
     ContactEditComponent,
+    SettingsComponent
   ],
   imports: [
-    ReactiveFormsModule,
     BrowserModule,
-    HttpClientModule,
     AppRoutingModule,
-    UserModule,
-    AccountModule,
-    BrowserAnimationsModule,
-    DemoMaterialModule,
-    StoreModule.forRoot({}),
+    HttpClientModule,
+    ReactiveFormsModule,
+    StoreModule.forRoot({user: userReducer}),
+    EffectsModule.forRoot([UserEffects]),
     StoreDevtoolsModule.instrument({
-      name: 'Contact me DevTools',
-      maxAge: 25
+      maxAge: 25,
+      logOnly: environment.production
     })
   ],
-  providers: [ContactService],
+  providers: [
+    NotificationService,
+    {provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true}
+  ],
   bootstrap: [AppComponent],
   schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })

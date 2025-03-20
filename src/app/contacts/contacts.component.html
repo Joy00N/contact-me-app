@@ -1,30 +1,86 @@
-<table class="table">
-  <thead class="thead-dark">
-  <tr>
-    <th scope="col"></th>
-    <th scope="col">#</th>
-    <th scope="col">Product Name</th>
-    <th scope="col">Opening Date</th>
-    <th scope="col">Expiration Date</th>
-    <th scope="col">Contact Type</th>
-    <th scope="col">Email Notification</th>
-    <th scope="col">Expired</th>
-  </tr>
-  </thead>
-  <tbody>
-  <tr *ngFor="let contact of contacts; let i = index;">
-    <td><input type="checkbox"/></td>
-    <td>{{i + 1}}</td>
-    <td>{{contact.productName}}</td>
-    <td>{{contact.openingDate}}</td>
-    <td>{{contact.expirationDate}}</td>
-    <td>{{contact.contactType}}</td>
-    <td>{{contact.isNotificationOn}}</td>
-    <td>{{contact.isExpired}}</td>
-    <td></td>
-  </tr>
-  </tbody>
-</table>
+<div class="container mt-4">
+  <div class="row">
+    <div class="col-12">
+      <h2>Contacts</h2>
+      
+      <!-- Loading Spinner -->
+      <div *ngIf="loading" class="text-center my-4">
+        <div class="spinner-border text-primary" role="status">
+          <span class="visually-hidden">Loading...</span>
+        </div>
+      </div>
 
+      <!-- Error Message -->
+      <div *ngIf="error" class="alert alert-danger" role="alert">
+        {{ error }}
+      </div>
 
-<button type="button" class="btn btn-primary" (click)="handleOnclick()">Send Email</button>
+      <!-- Contacts List -->
+      <div *ngIf="!loading && !error" class="table-responsive">
+        <table class="table table-hover">
+          <thead>
+            <tr>
+              <th>Product Name</th>
+              <th>Contact Type</th>
+              <th>Opening Date</th>
+              <th>Expiration Date</th>
+              <th>Status</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let contact of contacts">
+              <td>{{ contact.productName }}</td>
+              <td>{{ contact.contactType }}</td>
+              <td>{{ contact.openingDate | date }}</td>
+              <td>{{ contact.expirationDate | date }}</td>
+              <td>
+                <span [class]="contact.isExpired ? 'badge bg-danger' : 'badge bg-success'">
+                  {{ contact.isExpired ? 'Expired' : 'Active' }}
+                </span>
+              </td>
+              <td>
+                <div class="btn-group">
+                  <button class="btn btn-sm btn-primary" (click)="handleSendEmail(contact.id)">
+                    <i class="fas fa-envelope"></i> Send Email
+                  </button>
+                  <button class="btn btn-sm btn-danger" (click)="handleDeleteContact(contact.id)">
+                    <i class="fas fa-trash"></i> Delete
+                  </button>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Pagination -->
+      <div *ngIf="!loading && !error" class="d-flex justify-content-between align-items-center mt-4">
+        <div class="d-flex align-items-center">
+          <label class="me-2">Items per page:</label>
+          <select class="form-select form-select-sm" style="width: auto;" 
+                  [(ngModel)]="pageSize" (change)="onPageSizeChange($event.target.value)">
+            <option [value]="10">10</option>
+            <option [value]="25">25</option>
+            <option [value]="50">50</option>
+            <option [value]="100">100</option>
+          </select>
+        </div>
+        
+        <nav>
+          <ul class="pagination mb-0">
+            <li class="page-item" [class.disabled]="currentPage === 1">
+              <a class="page-link" href="#" (click)="onPageChange(currentPage - 1); $event.preventDefault()">Previous</a>
+            </li>
+            <li class="page-item" [class.active]="currentPage === page" *ngFor="let page of [1,2,3,4,5]">
+              <a class="page-link" href="#" (click)="onPageChange(page); $event.preventDefault()">{{ page }}</a>
+            </li>
+            <li class="page-item" [class.disabled]="currentPage === 5">
+              <a class="page-link" href="#" (click)="onPageChange(currentPage + 1); $event.preventDefault()">Next</a>
+            </li>
+          </ul>
+        </nav>
+      </div>
+    </div>
+  </div>
+</div>

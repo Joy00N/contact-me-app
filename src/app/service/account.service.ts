@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {BehaviorSubject, Observable} from 'rxjs';
+import {BehaviorSubject, Observable, of} from 'rxjs';
 import {User} from '../model/user';
 import {Router} from '@angular/router';
 import {HttpClient} from '@angular/common/http';
@@ -15,6 +15,10 @@ export class AccountService {
   private authenticateUrl = `${environment.apiUrl}/api/users/authenticate`;
   private registerUrl = `${environment.apiUrl}/api/users/register`;
 
+  // Mock credentials
+  private mockUsername = 'demo';
+  private mockPassword = 'demo123';
+
   public user: Observable<User>;
 
   constructor(private router: Router, private http: HttpClient, private store: Store<any>) {
@@ -27,11 +31,16 @@ export class AccountService {
   }
 
   login(username: string, password: string): Observable<boolean> {
-    const userObj = new User();
-    userObj.username = username;
-    userObj.password = password;
-
-    return this.http.post<boolean>(this.authenticateUrl, userObj);
+    // Mock login implementation
+    if (username === this.mockUsername && password === this.mockPassword) {
+      const userObj = new User();
+      userObj.username = username;
+      userObj.password = password;
+      localStorage.setItem('user', JSON.stringify(userObj));
+      this.userSubject.next(userObj);
+      return of(true);
+    }
+    return of(false);
   }
 
   logout() {
