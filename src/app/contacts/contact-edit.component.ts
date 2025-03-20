@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {ContactService} from '../service/contact.service';
-import {Contact} from '../model/contact';
+import {Contact, Priority} from '../model/contact';
 import {FormArray, FormBuilder, FormGroup} from '@angular/forms';
 
 @Component({
@@ -29,11 +29,19 @@ export class ContactEditComponent implements OnInit {
 
   save() {
     console.log(this.contactForm.getRawValue() as Contact);
-    const contact = new Contact();
-    contact.productName = this.contactForm.get('productName').value;
-    contact.contactType = this.contactForm.get('contactType').value;
-    contact.openingDate = this.contactForm.get('openingDate').value;
-    contact.isNotificationOn = this.contactForm.get('isNotificationOn').value;
-    this.contactService.setContacts(contact);
+    const contact: Contact = {
+      id: '',
+      userId: '',
+      productName: this.contactForm.get('productName').value,
+      contactType: this.contactForm.get('contactType').value,
+      openingDate: this.contactForm.get('openingDate').value,
+      isNotificationOn: this.contactForm.get('isNotificationOn').value,
+      expirationDate: '',
+      isExpired: false,
+      priority: Priority.MEDIUM,
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString()
+    };
+    this.contactService.setContact(contact);
   }
 }

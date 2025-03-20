@@ -1,0 +1,6 @@
+<div class="cat-container">
+  <button (click)="getNewCat()">Do you want a cat?</button>
+  <div class="cat-image-container" *ngIf="catImageUrl" [class.visible]="isImageVisible">
+    <img [src]="catImageUrl" alt="Random cat" class="cat-image">
+  </div>
+</div> 

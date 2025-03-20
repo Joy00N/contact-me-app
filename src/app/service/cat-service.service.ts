@@ -6,15 +6,12 @@ import {Observable} from 'rxjs';
   providedIn: 'root'
 })
 export class CatServiceService {
-
-  private url = `https://cors-anywhere.herokuapp.com/https://http.cat/`;
+  private url = 'https://api.thecatapi.com/v1/images/search';
 
   constructor(private http: HttpClient) {
   }
 
-  getCat(): Observable<Blob> {
-    const httpCodeList = [100, 101, 102, 200, 201, 202, 204];
-    const randomNumber = Math.floor(Math.random() * (httpCodeList.length - 1));
-    return this.http.get(this.url + httpCodeList[randomNumber], {responseType: 'blob'});
+  getCat(): Observable<any> {
+    return this.http.get(this.url);
   }
 }

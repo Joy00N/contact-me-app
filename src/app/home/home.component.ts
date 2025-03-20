@@ -1,5 +1,4 @@
 import {Component, OnInit} from '@angular/core';
-import {CatServiceService} from '../service/cat-service.service';
 
 @Component({
   selector: 'app-home',
@@ -7,40 +6,12 @@ import {CatServiceService} from '../service/cat-service.service';
   styleUrls: ['./home.component.scss']
 })
 export class HomeComponent implements OnInit {
-
   imgPath = '../assets/ContactMe.jpg';
   alt = 'Contact me logo';
 
-  catImg = null;
-  isCatShowing = false;
-
-  constructor(private catService: CatServiceService) {
+  constructor() {
   }
 
   ngOnInit() {
-  }
-
-  onClick() {
-    this.catService.getCat().subscribe(data => {
-      this.createImageFromBlob(data);
-    }, error => {
-      console.log(error);
-    });
-    this.isCatShowing = true;
-  }
-
-  onHideClick() {
-    this.isCatShowing = false;
-  }
-
-  createImageFromBlob(image: Blob) {
-    const reader = new FileReader();
-    reader.addEventListener('load', () => {
-      this.catImg = reader.result;
-    }, false);
-
-    if (image) {
-      reader.readAsDataURL(image);
-    }
   }
 }

@@ -53,4 +53,16 @@ export class AccountService {
       (err) => console.error(err)
     );
   }
+
+  isLoggedIn(): boolean {
+    return !!this.userValue;
+  }
+
+  updateUserSettings(settings: any): Observable<any> {
+    const user = this.userValue;
+    user.settings = settings;
+    localStorage.setItem('user', JSON.stringify(user));
+    this.userSubject.next(user);
+    return of(user);
+  }
 }

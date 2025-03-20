@@ -29,7 +29,7 @@ export class NotificationService {
       .subscribe();
   }
 
-  private checkExpiredContacts(): Observable<void> {
+  private checkExpiredContacts(): Observable<Contact[]> {
     return this.contactService.getContacts()
       .pipe(
         tap(contacts => {

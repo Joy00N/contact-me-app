@@ -5,4 +5,12 @@ export class User {
   firstName: string;
   lastName: string;
   email: string;
+  settings?: {
+    emailNotifications: boolean;
+    pushNotifications: boolean;
+    notificationFrequency: string;
+    language: string;
+    timezone: string;
+    theme: string;
+  };
 }

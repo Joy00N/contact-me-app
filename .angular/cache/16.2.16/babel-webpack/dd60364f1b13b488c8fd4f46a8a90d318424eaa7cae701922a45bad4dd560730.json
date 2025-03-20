@@ -1,0 +1,1 @@
+{"ast":null,"code":"import { createAction } from '@ngrx/store';\nexport const login = createAction('[User] Log In');\nexport const logout = createAction('[User] Log Out');","map":null,"metadata":{},"sourceType":"module","externalDependencies":[]}

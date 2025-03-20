@@ -5,13 +5,4 @@
       <app-layout></app-layout>
     </div>
   </div>
-  <div class="row">
-    <button type="button" class="btn btn-primary" (click)="onClick()">Do you want a cat?</button>
-    <button type="button" class="btn btn-secondary" (click)="onHideClick()">Bye cat!</button>
-  </div>
-  <div class="row">
-    <div *ngIf="isCatShowing && catImg">
-      <img [src]="catImg">
-    </div>
-  </div>
 </div>

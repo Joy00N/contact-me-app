@@ -1,0 +1,1 @@
+{"ast":null,"code":"import { createFeatureSelector, createSelector } from '@ngrx/store';\nconst getUserFeatureState = createFeatureSelector('users');\nexport const getIsLoggedIn = createSelector(getUserFeatureState, state => state ? state.loggedIn : false);","map":null,"metadata":{},"sourceType":"module","externalDependencies":[]}
