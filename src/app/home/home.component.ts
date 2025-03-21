@@ -6,7 +6,7 @@ import {Component, OnInit} from '@angular/core';
   styleUrls: ['./home.component.scss']
 })
 export class HomeComponent implements OnInit {
-  imgPath = '../assets/ContactMe.jpg';
+  imgPath = '../assets/contact_lenses_homepage.jpg';
   alt = 'Contact me logo';
 
   constructor() {
