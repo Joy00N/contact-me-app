@@ -1,6 +1,18 @@
 <div class="cat-container">
-  <button (click)="getNewCat()">Do you want a cat?</button>
-  <div class="cat-image-container" *ngIf="catImageUrl" [class.visible]="isImageVisible">
-    <img [src]="catImageUrl" alt="Random cat" class="cat-image">
+  <div class="cat-card">
+    <div class="cat-header">
+      <i class="material-icons">pets</i>
+      <h3>Cat Break!</h3>
+      <p>Need a quick break? Enjoy some cat photos!</p>
+    </div>
+
+    <button class="cat-button" (click)="getNewCat()">
+      <i class="material-icons">refresh</i>
+      Show me a cat
+    </button>
+
+    <div class="cat-image-container" *ngIf="catImageUrl" [class.visible]="isImageVisible">
+      <img [src]="catImageUrl" alt="Random cat" class="cat-image">
+    </div>
   </div>
-</div> 
+</div>

@@ -1,8 +1,14 @@
-<div class="container">
-  <div class="row">
-    <div class="col-4"><img style="width: 70%" [src]="imgPath" [alt]="alt"></div>
-    <div class="col-8">
-      <app-layout></app-layout>
+<div class="home-container">
+  <div class="row align-items-center">
+    <div class="col-lg-5 mb-4 mb-lg-0">
+      <div class="hero-image-wrapper">
+        <img [src]="imgPath" [alt]="alt" class="hero-image">
+      </div>
+    </div>
+    <div class="col-lg-7">
+      <div class="hero-content">
+        <app-layout></app-layout>
+      </div>
     </div>
   </div>
 </div>

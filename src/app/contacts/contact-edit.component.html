@@ -1,66 +1,96 @@
-<div class="container-fluid ml-2 mt-3">
-  <form (ngSubmit)="save()" [formGroup]="contactForm">
-    <div class="form-group row">
-      <div class="col-sm-2">
-        <label for="productName" class="col-form-label col-sm-1 pl-0">Product</label>
-      </div>
-      <div class="col-sm-3">
-        <input id="productName" type="text" class="form-control" formControlName="productName">
-      </div>
-    </div>
+<div class="page-container">
+  <div class="page-header">
+    <h2>Add New Contact Lens</h2>
+    <p class="page-subtitle">Track a new contact lens by entering the details below</p>
+  </div>
 
-    <div class="form-group row">
-      <div class="col-sm-2">
-        <label class="col-form-label col-sm-1 pl-0">Type</label>
-      </div>
-      <div class="col-sm-4">
-        <div class="form-check form-check-inline">
-          <input class="form-check-input" type="radio" id="yearly" value="yearly" formControlName="contactType">
-          <label class="form-check-label" for="yearly">
-            Yearly
-          </label>
-        </div>
-        <div class="form-check form-check-inline">
-          <input class="form-check-input" type="radio" id="monthly" value="monthly" formControlName="contactType">
-          <label class="form-check-label" for="monthly">
-            Monthly
-          </label>
-        </div>
-        <div class="form-check form-check-inline">
-          <input class="form-check-input" type="radio" id="biweekly" value="biweekly" formControlName="contactType">
-          <label class="form-check-label" for="biweekly">
-            Bi-weekly
-          </label>
-        </div>
-        <div class="form-check form-check-inline">
-          <input class="form-check-input" type="radio" id="daily" value="daily" formControlName="contactType">
-          <label class="form-check-label" for="daily">
-            Daily
-          </label>
-        </div>
-      </div>
-    </div>
+  <div class="form-card">
+    <form (ngSubmit)="save()" [formGroup]="contactForm">
+      <div class="form-section">
+        <h4 class="section-title">Product Information</h4>
 
-    <div class="form-group row">
-      <div class="col-sm-2">
-        <label class="col-form-label pl-0 pt-4 align-bottom">Open Date</label>
-      </div>
-      <mat-form-field class="pl-3">
-        <mat-label>Choose a date</mat-label>
-        <input matInput [matDatepicker]="myDatepicker" formControlName="openingDate">
-        <mat-datepicker-toggle matSuffix [for]="myDatepicker"></mat-datepicker-toggle>
-        <mat-datepicker #myDatepicker></mat-datepicker>
-      </mat-form-field>
-    </div>
+        <div class="form-group">
+          <label for="productName" class="form-label">Product Name</label>
+          <input
+            id="productName"
+            type="text"
+            class="form-control"
+            formControlName="productName"
+            placeholder="e.g., Acuvue Oasys">
+        </div>
 
-    <div class="form-group row">
-      <div class="col-sm-6 ml-4">
-        <input type="checkbox" class="custom-control-input" id="emailNotification" formControlName="isNotificationOn">
-        <label class="custom-control-label" for="emailNotification">Receive Email Notification</label>
+        <div class="form-group">
+          <label class="form-label">Contact Type</label>
+          <div class="radio-group">
+            <div class="radio-option">
+              <input class="form-check-input" type="radio" id="yearly" value="yearly" formControlName="contactType">
+              <label class="form-check-label" for="yearly">
+                <span class="radio-title">Yearly</span>
+                <span class="radio-desc">Replace once a year</span>
+              </label>
+            </div>
+            <div class="radio-option">
+              <input class="form-check-input" type="radio" id="monthly" value="monthly" formControlName="contactType">
+              <label class="form-check-label" for="monthly">
+                <span class="radio-title">Monthly</span>
+                <span class="radio-desc">Replace every month</span>
+              </label>
+            </div>
+            <div class="radio-option">
+              <input class="form-check-input" type="radio" id="biweekly" value="biweekly" formControlName="contactType">
+              <label class="form-check-label" for="biweekly">
+                <span class="radio-title">Bi-weekly</span>
+                <span class="radio-desc">Replace every 2 weeks</span>
+              </label>
+            </div>
+            <div class="radio-option">
+              <input class="form-check-input" type="radio" id="daily" value="daily" formControlName="contactType">
+              <label class="form-check-label" for="daily">
+                <span class="radio-title">Daily</span>
+                <span class="radio-desc">Single day use</span>
+              </label>
+            </div>
+          </div>
+        </div>
       </div>
-    </div>
 
-    <button type="submit" class="btn btn-primary">Save</button>
-    <button type="button" class="btn btn-secondary">Cancel</button>
-  </form>
+      <div class="form-section">
+        <h4 class="section-title">Dates</h4>
+
+        <div class="form-group date-picker-group">
+          <label class="form-label">Opening Date</label>
+          <mat-form-field appearance="outline">
+            <mat-label>Select date</mat-label>
+            <input matInput [matDatepicker]="myDatepicker" formControlName="openingDate">
+            <mat-datepicker-toggle matSuffix [for]="myDatepicker"></mat-datepicker-toggle>
+            <mat-datepicker #myDatepicker></mat-datepicker>
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div class="form-section">
+        <h4 class="section-title">Notifications</h4>
+
+        <div class="form-group">
+          <div class="checkbox-option">
+            <input type="checkbox" class="form-check-input" id="emailNotification" formControlName="isNotificationOn">
+            <label class="form-check-label" for="emailNotification">
+              <span class="checkbox-title">Email Reminders</span>
+              <span class="checkbox-desc">Receive email notifications before your contacts expire</span>
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-actions">
+        <button type="submit" class="btn btn-primary">
+          <i class="material-icons">save</i>
+          Save Contact
+        </button>
+        <button type="button" class="btn btn-secondary" routerLink="/contacts">
+          Cancel
+        </button>
+      </div>
+    </form>
+  </div>
 </div>
